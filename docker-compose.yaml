@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./project/backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      - GIN_MODE=debug
+    volumes:
+      - ./project/backend:/app
+      - /app/node_modules
+
+  frontend:
+    build:
+      context: ./project/frontend
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    volumes:
+      - ./project/frontend/src:/app/src
+      - ./project/frontend/public:/app/public
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
