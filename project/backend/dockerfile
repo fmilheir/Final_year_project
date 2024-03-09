@@ -1,0 +1,35 @@
+# Use the official Golang image to create a build artifact.
+# This is the development stage where we include tools like Air for live reloading.
+FROM golang:1.21 AS development
+
+# Set the environment variable to ensure Go modules are always used.
+ENV GO111MODULE=on
+
+# Install git, required if your dependencies need to be fetched via git.
+# This step is needed if you decide to build Air from source or if your Go project has dependencies that need to be fetched via git.
+RUN apt-get update && apt-get install -y git
+
+# Set the working directory inside the container.
+WORKDIR /app
+
+# Install Air for live reloading using a known stable version.
+# Replace 'v1.27.3' with the latest stable version as necessary.
+RUN go install github.com/cosmtrek/air@v1.27.3
+
+# Add the Go bin directory to the PATH so we can run Air directly.
+ENV PATH="/go/bin:${PATH}"
+
+# Copy go.mod and go.sum files first to leverage Docker cache.
+COPY go.mod go.sum ./
+
+# Download all dependencies.
+RUN go mod download
+
+# Copy the source from the current directory to the Working Directory inside the container.
+COPY . .
+
+# Expose port 8080 to the outside world.
+EXPOSE 8080
+
+# Command to run the executable with Air for live reloading.
+CMD ["air"]
