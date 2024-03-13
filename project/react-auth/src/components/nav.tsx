@@ -33,7 +33,7 @@ const Nav = ({ IsAuthenticated }: { IsAuthenticated: boolean }) => {
               <div className="dropdown">
                 <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
                   data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="/static/images/undraw_profile.svg" alt="Profile" className="rounded-circle" width="32" height="32" />
+                  <img src="../images/undraw_profile.svg" alt="Profile" className="rounded-circle" width="32" height="32" />
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                   <li><a className="dropdown-item" href="/profile">Profile</a></li>
