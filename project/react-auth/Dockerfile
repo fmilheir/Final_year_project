@@ -22,5 +22,8 @@ FROM nginx:alpine
 # Copy the build output to replace the default nginx contents.
 COPY --from=build /app/build /usr/share/nginx/html
 
+# Copy the nginx configuration file to the container
+COPY default.conf /etc/nginx/conf.d/default.conf
+
 # Start Nginx and keep it running in the foreground
 CMD ["nginx", "-g", "daemon off;"]

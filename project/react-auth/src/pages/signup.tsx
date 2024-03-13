@@ -12,8 +12,9 @@ const  Signup = () => {
     const [redirect, setRedirect] = useState(false);
 
     const Submit = async (e: SyntheticEvent) => {
+      console.log("submit");
         e.preventDefault();
-        await fetch("http://localhost:8000/api/signup", {
+        await fetch("http://localhost:8000/api/register", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

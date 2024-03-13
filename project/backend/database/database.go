@@ -31,4 +31,4 @@ func Connect() {
 	db.AutoMigrate(&models.Users{})
 	log.Println("Database Migrated")
 	DB = Dbinstance{Db: db} 
-} 
+}
