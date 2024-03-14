@@ -10,7 +10,7 @@ const LoginUser = () => {
 
   const Submit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await fetch("http://localhost:8000/api/login", {
+    await fetch("http://localhost:8080/api/login_user", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

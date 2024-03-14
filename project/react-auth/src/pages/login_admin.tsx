@@ -9,7 +9,7 @@ const LoginAdmin: React.FC = () => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await fetch("http://localhost:8000/api/login", {
+    await fetch("http://localhost:8080/api/login_admin", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -1,20 +1,25 @@
 import React, {SyntheticEvent, useState} from "react";
 import { Navigate } from 'react-router-dom';
+import { json } from "stream/consumers";
 
 const  Signup = () => {
 
     const [messages] = useState([]);
     const [email, setEmail] = useState("");
     const [firstName, setFirstName] = useState("");
-    const [password1, setPassword1] = useState("");
+    const [password, setPassword1] = useState("");
     const [password2, setPassword2] = useState("");
-    const [company, setCompany] = useState("");
+    const [companyName, setCompany] = useState("");
     const [redirect, setRedirect] = useState(false);
 
     const Submit = async (e: SyntheticEvent) => {
       console.log("submit");
+      if (password !== password2) {
+        return alert("Passwords do not match");
+      }
+
         e.preventDefault();
-        await fetch("http://localhost:8000/api/register", {
+        await fetch("http://localhost:8080/api/register_admin", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -22,9 +27,8 @@ const  Signup = () => {
             body: JSON.stringify({
                 email,
                 firstName,
-                password1,
-                password2,
-                company,
+                password,
+                companyName,
             }),
             });
             setRedirect(true);

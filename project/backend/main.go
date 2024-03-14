@@ -14,13 +14,10 @@ func main() {
 	app := fiber.New()
 
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "*", // Allows all origins
-		AllowMethods: "GET,POST,PUT,PATCH,DELETE", // Specifies allowed methods
-		AllowHeaders: "Origin, Content-Type, Accept", // Specifies allowed headers
-		AllowCredentials: true, // Allows credentials
+		AllowCredentials: true,
 	}))
 
 	routes.Setup(app)
 
-	app.Listen(":8000")
+	app.Listen(":8080")
 }
