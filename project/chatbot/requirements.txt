@@ -1,0 +1,14 @@
+langchain
+llama-cpp-python==0.2.36
+langchain-community
+faiss-cpu
+numpy
+gpt4all
+pdfminer.six
+python-pptx
+transformers
+flask
+google-api-python-client
+google-auth
+flask_executor
+python-docx
