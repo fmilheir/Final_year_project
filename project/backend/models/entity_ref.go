@@ -12,12 +12,16 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+	"github.com/jinzhu/gorm"
+		 _ "github.com/jinzhu/gorm/dialects/postgres"  
 )
 
 // EntityRef Entity reference schema to be use for all entityRef class.
 //
 // swagger:model EntityRef
 type EntityRef struct {
+
+	gorm.Model
 
 	// When sub-classing, this defines the super-class
 	AtBaseType string `json:"@baseType,omitempty"`
@@ -34,11 +38,11 @@ type EntityRef struct {
 
 	// Hyperlink reference
 	// Format: uri
-	Href strfmt.URI `json:"href,omitempty"`
+	Href strfmt.URI `json:"href,omitempty" `
 
 	// unique identifier
 	// Required: true
-	ID *string `json:"id"`
+	ID *string `json:"id" gorm:"primary_key"`
 
 	// Name of the related entity.
 	Name string `json:"name,omitempty"`

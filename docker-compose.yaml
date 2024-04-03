@@ -41,18 +41,7 @@ services:
     environment:
       - NODE_ENV=development
 
-  chatbot:
-    build:
-      context: ./project/chatbot
-      dockerfile: Dockerfile
-    ports:
-      - '5000:5000'
-    volumes:
-      - ./project/chatbot:/app
-    depends_on:
-      - backend
-    environment:
-      - FLASK_ENV=development
+ 
 
 volumes:
   postgres-data:

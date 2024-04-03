@@ -31,6 +31,7 @@ func Connect() {
 	db.AutoMigrate(&models.Company{})
 	db.AutoMigrate(&models.Admin{})
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Incident{}, &models.EntityRef{}, &models.CharacteristicRelationship{}, &models.ResourceEntity{}, &models.Characteristic{})
 	log.Println("Database Migrated")
 	DB = Dbinstance{Db: db} 
 }
