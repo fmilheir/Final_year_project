@@ -6,6 +6,7 @@ import Home from './pages/home';
 import LoginUser from './pages/login_user'; 
 import Dashboard from './pages/dashboard';
 import Chatbot from './pages/chatbot';
+import CreateTicketForm from './pages/create_ticket';
 import { BrowserRouter, Route , Routes, Navigate } from 'react-router-dom';
 import './App.css';
 
@@ -24,7 +25,7 @@ function App() {
             <Route path="/signup" element={<Signup/>}/>   
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/chatbot" element={<Chatbot/>} />
-
+            <Route path="/create_ticket" element={<CreateTicketForm/>} />
           </Routes>
         </main>
       </BrowserRouter>

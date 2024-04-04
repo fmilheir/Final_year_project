@@ -22,7 +22,7 @@ import (
 //go:generate swagger generate server --target ..\..\backend --name Incident --spec ..\..\..\Documents\TMF724-Incident-v4.0.1.swagger.json --principal interface{}
 
 func configureFlags(api *operations.IncidentAPI) {
-	// api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
+	 api.CommandLineOptionsGroups = []swag.CommandLineOptionsGroup{ ... }
 }
 
 func configureAPI(api *operations.IncidentAPI) http.Handler {

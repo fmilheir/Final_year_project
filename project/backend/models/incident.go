@@ -61,10 +61,10 @@ type Incident struct {
 	EventID []*ResourceEntity `json:"eventId" gorm:"foreignKey:ID"`
 
 	// This is used for extend the incident with attributes
-	ExtensionInfo []*Characteristic `json:"extensionInfo" gorm:"size:255"`
+	ExtensionInfo []*Characteristic `json:"extensionInfo" gorm:"foreignKey:ID"`
 
 	// An identification of an entity that is owned by or originates in a software system different from the current system, for example a ProductOrder handed off from a commerce platform into an order handling system. The structure identifies the system itself, the nature of the entity within the system (e.g. class name) and the unique ID of the entity within the system. It is anticipated that multiple external IDs can be held for a single entity, e.g. if the entity passed through multiple systems on the way to the current system. In this case the consumer is expected to sequence the IDs in the array in reverse order of provenance, i.e. most recent system first in the list.
-	ExternalIdentifier []*ExternalIdentifier `json:"externalIdentifier" gorm:"size:255"`
+	ExternalIdentifier []*ExternalIdentifier `json:"externalIdentifier" gorm:"foreignKey:ID"`
 
 	// Hyperlink, a reference to the incident entity
 	Href string `json:"href,omitempty" gorm:"size:255"`
@@ -93,14 +93,14 @@ type Incident struct {
 	Priority PriorityType `json:"priority,omitempty"`
 
 	// A root cause is a fundamental or underlying reason behind why an incident occurred that identifies one or more failures. An incident many have multiple rootCauses
-	RootCause []*RootCause `json:"rootCause"`
+	RootCause []*RootCause `json:"rootCause" gorm:"foreignKey:ID"`
 
 	// The root event object such as alarm, externalAlarm, performance, etc.
-	RootEventID []*ResourceEntity `json:"rootEventId"`
+	RootEventID []*ResourceEntity `json:"rootEventId" gorm:"foreignKey:ID"`
 
 	// The objects show the incident, it may be part of Network Equipment. Fault object, which may be an NE or a port.
 	// Example: e.g. weak optical signals, the fault object is a PON port, the root cause is an optical splitter, and the affected object is an ONU
-	SourceObject []*ResourceEntity `json:"sourceObject"`
+	SourceObject []*ResourceEntity `json:"sourceObject " gorm:"foreignKey:AtSchemaLocation"`
 
 	// Incident state. The options are raised | updated | cleared. Cleared means Resolved)
 	State IncidentStateType `json:"state,omitempty"`

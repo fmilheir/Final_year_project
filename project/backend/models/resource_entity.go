@@ -27,7 +27,7 @@ type ResourceEntity struct {
 
 	// A URI to a JSON-Schema file that defines additional attributes and relationships
 	// Format: uri
-	AtSchemaLocation strfmt.URI `json:"@schemaLocation,omitempty"`
+	AtSchemaLocation strfmt.URI `json:"@schemaLocation,omitempty" gorm:"primary_key"`
 
 	// When sub-classing, this defines the sub-class Extensible name
 	AtType string `json:"@type,omitempty"`
