@@ -29,8 +29,6 @@ func main() {
 
 	routes.Setup(app)
 
-	
-
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
 	if err != nil {
 		log.Fatalln(err)

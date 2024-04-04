@@ -15,6 +15,7 @@ services:
     volumes:
       - ./project/backend:/app
       - ./project/backend/node_modules:/app/node_modules
+      - ./project/backend/certificates:/usr/src/app/certificates
 
   db:
       image: postgres:alpine

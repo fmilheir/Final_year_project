@@ -103,6 +103,7 @@ type Server struct {
 	interrupt    chan os.Signal
 }
 
+
 // Logf logs message either via defined user logger or via system one if no user logger is defined.
 func (s *Server) Logf(f string, args ...interface{}) {
 	if s.api != nil && s.api.Logger != nil {
@@ -151,6 +152,9 @@ func (s *Server) hasScheme(scheme string) bool {
 
 // Serve the api
 func (s *Server) Serve() (err error) {
+	s.TLSCertificate = flags.Filename("/usr/src/app/certificates/cert.pem")
+	s.TLSCertificateKey = flags.Filename("/usr/src/app/certificates/key.pem")
+	
 	if !s.hasListeners {
 		if err = s.Listen(); err != nil {
 			return err
@@ -291,7 +295,7 @@ func (s *Server) Serve() (err error) {
 
 		if len(httpsServer.TLSConfig.Certificates) == 0 && httpsServer.TLSConfig.GetCertificate == nil {
 			// after standard and custom config are passed, this ends up with no certificate
-			if s.TLSCertificate == "" {
+			if s.TLSCertificate == ""{
 				if s.TLSCertificateKey == "" {
 					s.Fatalf("the required flags `--tls-certificate` and `--tls-key` were not specified")
 				}

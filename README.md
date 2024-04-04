@@ -10,7 +10,8 @@ customer management system following the CRUD (Create, Read, Update, Delete) mod
 
 ## Requirements
 
-Ensure you have Node.js and npm installed. You will also need to install json-server globally:
+
 
 ```bash
-npm install -g json-server
+Docker compose up --build
+

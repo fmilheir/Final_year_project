@@ -6,7 +6,7 @@ const Nav = ({ IsAuthenticated }: { IsAuthenticated: boolean }) => {
     <header className="navbar navbar-expand-md navbar-light bg-light">
       <div className="container">
         <a href="/" className="navbar-brand">
-          <img src="../images/solent_logo.png" alt="Logo image" />
+          <img src="/app/src/images/solent_logo.png" alt="Logo image" />
         </a>
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
           aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
