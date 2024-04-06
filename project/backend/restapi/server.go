@@ -47,6 +47,9 @@ func NewServer(api *operations.IncidentAPI) *Server {
 
 	s.TLSCertificate = flags.Filename("/usr/src/app/certificates/cert.pem")
 	s.TLSCertificateKey = flags.Filename("/usr/src/app/certificates/key.pem")
+
+	s.TLSPort = 8080
+
 	s.shutdown = make(chan struct{})
 	s.api = api
 	s.interrupt = make(chan os.Signal, 1)
@@ -292,7 +295,6 @@ func (s *Server) Serve() (err error) {
 
 		// call custom TLS configurator
 		configureTLS(httpsServer.TLSConfig)
-		fmt.Print("I am here")
 
 		if len(httpsServer.TLSConfig.Certificates) == 0 && httpsServer.TLSConfig.GetCertificate == nil {
 			// after standard and custom config are passed, this ends up with no certificate
@@ -314,6 +316,7 @@ func (s *Server) Serve() (err error) {
 		servers = append(servers, httpsServer)
 		wg.Add(1)
 		s.Logf("Serving incident at https://%s", s.httpsServerL.Addr())
+		s.Logf("Serving incident at")
 		go func(l net.Listener) {
 			defer wg.Done()
 			if err := httpsServer.Serve(l); err != nil && err != http.ErrServerClosed {

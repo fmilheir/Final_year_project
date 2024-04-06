@@ -8,11 +8,11 @@ import (
 	"github.com/go-openapi/loads"
 	flags "github.com/jessevdk/go-flags"
 
-    "github.com/gofiber/fiber/v2"
-    "github.com/gofiber/fiber/v2/middleware/cors"
+   // "github.com/gofiber/fiber/v2"
+   // "github.com/gofiber/fiber/v2/middleware/cors"
  
     "github.com/fmilheir/final_year_project/backend/database"
-    "github.com/fmilheir/final_year_project/backend/routes"
+   // "github.com/fmilheir/final_year_project/backend/routes"
 	"github.com/fmilheir/final_year_project/backend/restapi"
 	"github.com/fmilheir/final_year_project/backend/restapi/operations"
 	
@@ -21,13 +21,13 @@ import (
 func main() {
 	database.Connect()
 
-	app := fiber.New()
+	//app := fiber.New()
 
-	app.Use(cors.New(cors.Config{
-		AllowCredentials: true,
-	}))
+	//app.Use(cors.New(cors.Config{
+//		AllowCredentials: true,
+//	}))
 
-	routes.Setup(app)
+	//routes.Setup(app)
 
 	swaggerSpec, err := loads.Embedded(restapi.SwaggerJSON, restapi.FlatSwaggerJSON)
 	if err != nil {
@@ -67,5 +67,5 @@ func main() {
 		log.Fatalln(err)
 	}
 	
-	app.ListenTLS(":443", "/usr/src/app/certificates/cert.pem", "/usr/src/app/certificates/key.pem")
+	//app.ListenTLS(":443", "/usr/src/app/certificates/cert.pem", "/usr/src/app/certificates/key.pem")
 }
