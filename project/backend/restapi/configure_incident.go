@@ -6,6 +6,8 @@ import (
 	"crypto/tls"
 	"net/http"
 	"time"
+	"fmt"
+	"log"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
@@ -17,6 +19,7 @@ import (
 	"github.com/fmilheir/final_year_project/backend/restapi/operations/incident"
 	"github.com/fmilheir/final_year_project/backend/restapi/operations/notification_listeners_client_side"
 	"github.com/fmilheir/final_year_project/backend/restapi/operations/resolve_incident"
+
 )
 
 //go:generate swagger generate server --target ..\..\backend --name Incident --spec ..\..\..\Documents\TMF724-Incident-v4.0.1.swagger.json --principal interface{}
@@ -28,7 +31,6 @@ func configureFlags(api *operations.IncidentAPI) {
 func configureAPI(api *operations.IncidentAPI) http.Handler {
 	// configure the api here
 	api.ServeError = errors.ServeError
-
 	// Set your custom logger if needed. Default one is log.Printf
 	// Expected interface func(string, ...interface{})
 	//
@@ -132,6 +134,7 @@ func configureAPI(api *operations.IncidentAPI) http.Handler {
 	api.PreServerShutdown = func() {}
 
 	api.ServerShutdown = func() {}
+	
 
 	return setupGlobalMiddleware(api.Serve(setupMiddlewares))
 }
@@ -142,7 +145,9 @@ func configureTLS(tlsConfig *tls.Config) {
     tlsConfig.CipherSuites = []uint16{
         tls.TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,
         tls.TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,
+		tls.TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,
     }
+	 tlsConfig.NextProtos = append(tlsConfig.NextProtos, "h2")
 }
 
 // As soon as server is initialized but not run yet, this function will be called.
@@ -160,6 +165,7 @@ func configureServer(s *http.Server, scheme, addr string) {
 // The middleware configuration is for the handler executors. These do not apply to the swagger.json document.
 // The middleware executes after routing but before authentication, binding and validation.
 func setupMiddlewares(handler http.Handler) http.Handler {
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         // Log request, validate, etc.
         handler.ServeHTTP(w, r)
@@ -170,8 +176,14 @@ func setupMiddlewares(handler http.Handler) http.Handler {
 // The middleware configuration happens before anything, this middleware also applies to serving the swagger.json document.
 // So this is a good place to plug in a panic handling middleware, logging and metrics.
 func setupGlobalMiddleware(handler http.Handler) http.Handler {
+	fmt.Print("I am here")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		// Global logging, panic recovery, etc.
+		defer func() {
+			if err := recover(); err != nil {
+				log.Printf("Recovered from panic: %+v", err)
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			}
+		}()
 		handler.ServeHTTP(w, r)
 	})
 }

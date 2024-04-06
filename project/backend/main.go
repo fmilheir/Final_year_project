@@ -60,11 +60,12 @@ func main() {
 		}
 		os.Exit(code)
 	}
-
+	
 	server.ConfigureAPI()
-
 	if err := server.Serve(); err != nil {
+		fmt.Print("Error")
 		log.Fatalln(err)
 	}
-	app.Listen(":8080")
+	
+	app.ListenTLS(":443", "/usr/src/app/certificates/cert.pem", "/usr/src/app/certificates/key.pem")
 }
