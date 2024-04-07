@@ -1,25 +1,18 @@
-:root{
+:root {
   --bs-font-sans-serif: 'Sofia Sans', sans-serif;
-}
-
-.container-xxl{max-width: 1560px;}
-
-body{
-  background-color: rgb(243,243,243);
-  --color-error:#cc3333;
-  --color-secondary:green;
-  --color-success:green;
+  --color-error: #cc3333;
+  --color-secondary: green;
+  --color-success: green;
   --border-radius: 4px;
 }
-a {color: var(--bs-dark);}
 
-.img-profile {
-  width: 40px; /* Adjust as needed */
-  height: 40px; /* Adjust as needed */
-  border-radius: 50%; /* This will make it round */
+.container-xxl {
+  max-width: 1560px;
 }
 
 body {
+  background-color: rgb(243, 243, 243);
+  margin: 0;
   font-family: Arial, sans-serif;
   display: flex;
   flex-direction: column;
@@ -27,17 +20,14 @@ body {
   padding: 20px;
 }
 
-#stockSelector {
-  margin-bottom: 20px;
-  padding: 10px;
-  font-size: 16px;
-  width: 200px;
+a {
+  color: var(--bs-dark);
 }
 
-#stockChart {
-  max-width: 1000px;
-  width: 100%;
-  height: auto;
+.img-profile {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 .form-control:focus {
@@ -49,41 +39,23 @@ body {
   color: #007bff;
 }
 
-.btn-primary {
+.btn-primary,
+.btn-outline-primary {
   border-radius: 10px;
   font-weight: 600;
 }
 
-.btn-primary:hover {
+.btn-primary:hover,
+.btn-outline-primary:hover {
   background-color: #0069d9;
 }
 
-/* Add custom CSS to style the container */
 .container {
   background-color: #f8f9fa;
   padding: 80px;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-
-.charts-container {
-  display: flex;
-  justify-content: space-between;
-}
-
-.chart {
-  margin: 0 20px;
-  /* Adjust the spacing as needed */
-}
-
-/* Add some margin to the dropdowns for spacing */
-#predictionMethodSelector {
-  margin-bottom: 20px;
-  padding: 10px;
-  font-size: 16px;
-  width: 200px;
-}
-
 
 .chatbot-container {
   display: flex;

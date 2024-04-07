@@ -48,7 +48,7 @@ func NewServer(api *operations.IncidentAPI) *Server {
 	s.TLSCertificate = flags.Filename("/usr/src/app/certificates/cert.pem")
 	s.TLSCertificateKey = flags.Filename("/usr/src/app/certificates/key.pem")
 
-	s.TLSPort = 8080
+	s.TLSPort = 8000
 
 	s.shutdown = make(chan struct{})
 	s.api = api
@@ -316,7 +316,7 @@ func (s *Server) Serve() (err error) {
 		servers = append(servers, httpsServer)
 		wg.Add(1)
 		s.Logf("Serving incident at https://%s", s.httpsServerL.Addr())
-		s.Logf("Serving incident at")
+		log.Fatal(http.ListenAndServeTLS(":8080", "/usr/src/app/certificates/cert.pem" , "/usr/src/app/certificates/key.pem", nil))
 		go func(l net.Listener) {
 			defer wg.Done()
 			if err := httpsServer.Serve(l); err != nil && err != http.ErrServerClosed {

@@ -16,7 +16,7 @@ function App() {
     <div className="App">
       <BrowserRouter>
       <Nav IsAuthenticated={IsAuthenticated} />
-      <main className='form-signin'>
+      <main className='form-signin' style={{marginTop: "60px"}}>
           <Routes>
             <Route path="/" element={<Navigate replace to="/home" />} />
             <Route path="/home" element={<Home />} />

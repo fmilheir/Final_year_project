@@ -1,36 +1,47 @@
 import React, { SyntheticEvent, useState } from "react";
 import { Navigate } from "react-router-dom";
+import '../App.css';
 
 const LoginAdmin: React.FC = () => {
-  const [messages] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [redirect, setRedirect] = useState<boolean>(false);
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    await fetch("http://localhost:8080/api/login_admin", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
-    setRedirect(true);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/login_admin", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
+
+      setRedirect(true);
+    } catch (error) {
+      setErrorMessage("Invalid email or password. Please try again.");
+    }
   };
 
   if (redirect) return <Navigate to="/dashboard" />;
 
   return (
     <main>
-      {messages.map((message, index) => (
-        <div key={index} className={`alert alert-${message}`}>
-          {message}
+      {errorMessage && (
+        <div className="alert alert-danger" role="alert">
+          {errorMessage}
         </div>
-      ))}
+      )}
       <div className="container my-5">
         <div className="row d-flex justify-content-center">
           <div className="col-md-6">
@@ -39,31 +50,29 @@ const LoginAdmin: React.FC = () => {
               Admin Portal
             </h1>
             <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="email">Email address</label>
-                <div>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                  />
-                </div>
+              <div className="form-group">
+                <label htmlFor="email">Email Address</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  id="email"
+                  placeholder="Enter email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                />
               </div>
-              <div>
+              <div className="form-group">
                 <label htmlFor="password">Password</label>
-                <div>
-                  <input
-                    type="password"
-                    className="form-control"
-                    id="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                </div>
+                <input
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  placeholder="Enter password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
               </div>
               <button type="submit" className="btn btn-primary btn-block">
                 Submit
