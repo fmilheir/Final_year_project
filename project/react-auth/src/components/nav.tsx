@@ -1,59 +1,51 @@
-import React from "react";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import logo from '../images/solent_logo.png';
+import profileIcon from '../images/undraw_profile.svg';
+import '../css/nav.css'; // Import custom CSS styles
 
-const Nav = ({ IsAuthenticated }: { IsAuthenticated: boolean }) => {
+interface Props {
+  isAuthenticated: boolean;
+}
+
+const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
   return (
-    <header className="navbar navbar-expand-md navbar-light bg-light">
-      <div className="container">
-        <a href="/" className="navbar-brand">
-          <img src="/app/src/images/solent_logo.png" alt="Logo image" />
-        </a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarNav">
-          <ul className="navbar-nav me-auto mb-2 mb-md-0">
-            {IsAuthenticated ? (
+    <Navbar expand="lg" bg="light" variant="light">
+      <Container>
+        <Navbar.Brand as={Link} to="/">
+          <img src={logo} alt="Company Logo" className="nav-logo" width="150" height="auto" />
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="navbarNav" />
+        <Navbar.Collapse id="navbarNav">
+          <Nav className="me-auto">
+            {isAuthenticated && (
               <>
-                <li className="nav-item">
-                  <a className="nav-link" href="/home">Home</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/my_stocks">Predictions</a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="/news">News</a>
-                </li>
+                <Nav.Link as={Link} to="/home" className="btn btn-primary me-2">Home</Nav.Link>
+                <Nav.Link as={Link} to="/my_stocks" className="btn btn-primary me-2">Predictions</Nav.Link>
+                <Nav.Link as={Link} to="/news" className="btn btn-primary me-2">News</Nav.Link>
               </>
-            ) : null}
-          </ul>
-          <div className="d-flex">
-            {IsAuthenticated ? (
-              <div className="dropdown">
-                <button className="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                  data-bs-toggle="dropdown" aria-expanded="false">
-                  <img src="../images/undraw_profile.svg" alt="Profile" className="rounded-circle" width="32" height="32" />
-                </button>
-                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                  <li><a className="dropdown-item" href="/profile">Profile</a></li>
-                  <li><hr className="dropdown-divider" /></li>
-                  <li><a className="dropdown-item" href="/logout">Sign out</a></li>
-                </ul>
-              </div>
+            )}
+          </Nav>
+          <Nav>
+            {isAuthenticated ? (
+              <NavDropdown title={<img src={profileIcon} alt="Profile" className="profile-icon" width="32" height="32" />} id="profile-dropdown">
+                <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item as={Link} to="/logout">Sign out</NavDropdown.Item>
+              </NavDropdown>
             ) : (
-              <div className="btn-group" role="group" aria-label="Auth Links">
-                <a href="/" className="btn btn-outline-primary me-2">Home</a>
-                <a href="/signup" className="btn btn-primary me-2">Sign-up</a>
-                <a href="/login_user" className="btn btn-primary me-2">Login</a>
-                <a href="/login_admin" className="btn btn-primary me-2">Admin</a>
+              <div className="d-flex">
+                <Link to="/signup" className="btn btn-primary me-2">Sign-up</Link>
+                <Link to="/login_user" className="btn btn-primary me-2">Login</Link>
+                <Link to="/login_admin" className="btn btn-primary me-2">Admin</Link>
               </div>
             )}
-          </div>
-        </div>
-      </div>
-    </header>
-  );    
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
+    </Navbar>
+  );
 };
 
-export default Nav;
+export default Navigation;

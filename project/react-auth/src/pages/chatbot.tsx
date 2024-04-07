@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import '../css/chatbot.css'; // Import custom CSS for styling
 
 interface Message {
   role: string;
@@ -9,6 +10,17 @@ const Chatbot: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Added loading state
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const scrollToBottom = () => {
+    const chatHistory = document.querySelector('.chat-history');
+    if (chatHistory) {
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+  };
 
   const sendMessage = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,7 +61,7 @@ const Chatbot: React.FC = () => {
             {message.content}
           </div>
         ))}
-        {isLoading && <div className="message loading">Waiting for response...</div>} {/* Display waiting message */}
+        {isLoading && <div className="loading-message">Bot is typing...</div>} {/* Display loading message */}
       </div>
       <form onSubmit={sendMessage} className="input-container">
         <input
