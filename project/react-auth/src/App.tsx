@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/nav';
 import Home from './pages/home';
 import LoginAdmin from './pages/login_admin';
@@ -20,12 +20,19 @@ const App: React.FC = () => {
 
   const fetchUserData = async () => {
     try {
+      // Fetch JWT token from browser cookies
+      const jwt = document.cookie.split('; ').find(row => row.startsWith('jwt='));
+      if (!jwt) {
+        throw new Error('JWT token not found in cookies');
+      }
+      const token = jwt.split('=')[1];
+  
       // Fetch user data from the backend
       const response = await fetch('http://localhost:8080/api/user', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          // Add any authentication headers if required
+          'Authorization': `Bearer ${token}`, // Include JWT token in the request headers
         },
       });
       if (!response.ok) {
@@ -39,34 +46,35 @@ const App: React.FC = () => {
       console.error('Error fetching user data:', error);
     }
   };
+  
 
-  const isAuthenticated = false ;// userData !== null; // Check if user data is fetched
+  const isAuthenticated = userData !== null; // Check if user data is fetched
 
   return (
-    <body>
-      <div className="App">
-        <Router>
+    <div className="App">
+      <Router>
+        <header>
+          <Navigation isAuthenticated={isAuthenticated} />
+        </header>
         <Routes>
-            <Navigation isAuthenticated={isAuthenticated} />
-              <Route path="/" element={<Navigate replace to="/home" />} />
-              <Route path="/home" element={<Home />} />
-              <Route path="/login_admin" element={<LoginAdmin />} />
-              <Route path="/login_user" element={<LoginUser />} />
-              <Route path="/signup" element={<Signup />} />
-              {isAuthenticated ? (
-                <>
-                  <Route path="/dashboard" element={<Dashboard />} />
-                  <Route path="/chatbot" element={<Chatbot />} />
-                  <Route path="/create_ticket" element={<CreateTicketForm />} />
-                </>
-              ) : (
-                <Route path="*" element={<Navigate replace to="/home" />} />
-              )}
-              <Route path="*" element={<Navigate replace to="/home" />} />
-            </Routes>
-        </Router>
-      </div>
-    </body>
+          <Route path="/" element={<Navigate replace to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login_admin" element={<LoginAdmin />} />
+          <Route path="/login_user" element={<LoginUser />} />
+          <Route path="/signup" element={<Signup />} />
+          {isAuthenticated ? (
+            <>
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/chatbot" element={<Chatbot />} />
+              <Route path="/create_ticket" element={<CreateTicketForm />} />
+            </>
+          ) : (
+            <Route path="*" element={<Navigate replace to="/home" />} />
+          )}
+          <Route path="*" element={<Navigate replace to="/home" />} />
+        </Routes>
+      </Router>
+    </div>
   );
 };
 

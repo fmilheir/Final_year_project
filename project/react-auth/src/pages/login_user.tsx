@@ -26,6 +26,15 @@ const LoginUser = () => {
       if (!response.ok) {
         throw new Error("Invalid credentials");
       }
+      else {
+        const data = await response.json();
+        console.log(data);
+        console.log(data.jwt); // Log the JWT token to the console
+        const jwtToken = data.jwt;
+        document.cookie = jwtToken;
+        localStorage.setItem("jwt", jwtToken);
+        document.cookie = "user=true";
+      }
 
       setRedirect(true);
     } catch (error) {

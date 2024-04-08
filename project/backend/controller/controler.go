@@ -1,14 +1,14 @@
 package controller
 
 import (
+	"bytes"
+	"encoding/json"
 	"log"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
-	"net/http"
-	"bytes"
-	"encoding/json"
-
+	"fmt"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fmilheir/final_year_project/backend/database"
@@ -16,7 +16,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"golang.org/x/crypto/bcrypt"
-	
 )
 
 func init() {
@@ -32,6 +31,12 @@ func Register_admin(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
+	if data["companyName"] == "" || data["firstName"] == "" || data["email"] == "" || data["password"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Bad request please fill in all fields",
+		})
+	}
 
 	// Create the company
 	company := models.Company{
@@ -39,17 +44,20 @@ func Register_admin(c *fiber.Ctx) error {
 	}
 	database.DB.Db.Create(&company)
 	// Hash the password
-	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
+	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
 
 	user := models.Admin{
-		Username: data["username"],
-		Email:    data["email"],
-		Password: password,
+		Username:  data["username"],
+		Email:     data["email"],
+		Password:  password,
 		CompanyID: company.ID,
 	}
 	// Create a new record
 	database.DB.Db.Create(&user)
-	return c.JSON(data)
+	return c.JSON(user)
 }
 
 func Register_user(c *fiber.Ctx) error {
@@ -59,19 +67,21 @@ func Register_user(c *fiber.Ctx) error {
 	}
 
 	// Hash the password
-	password, _ := bcrypt.GenerateFromPassword([]byte(data["password"]), 14)
+	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
 
 	user := models.User{
-		Username: data["username"],
-		Email:    data["email"],
-		Password: password,
+		Username:  data["username"],
+		Email:     data["email"],
+		Password:  password,
 		CompanyID: 1,
 	}
 	// Create a new record
 	database.DB.Db.Create(&user)
-	return c.JSON(data)
+	return c.JSON(user)
 }
-
 
 func Login_admin(c *fiber.Ctx) error {
 	var data map[string]string
@@ -93,7 +103,7 @@ func Login_admin(c *fiber.Ctx) error {
 			"message": "Incorrect password",
 		})
 	}
-	
+
 	claims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Issuer:    strconv.Itoa(int(user.ID)),
 		ExpiresAt: time.Now().Add(time.Hour * 24).Unix(),
@@ -109,13 +119,14 @@ func Login_admin(c *fiber.Ctx) error {
 		Name:     "jwt",
 		Value:    token,
 		Expires:  time.Now().Add(time.Hour * 24),
-		HTTPOnly: true,
+		HTTPOnly: false,
+		MaxAge:  86400,
 	})
 	return c.JSON(fiber.Map{
+		"token": token,
 		"message": "Success",
 	})
 }
-
 
 func Login_user(c *fiber.Ctx) error {
 	var data map[string]string
@@ -126,7 +137,7 @@ func Login_user(c *fiber.Ctx) error {
 	var user models.User
 
 	database.DB.Db.Where("email = ?", data["email"]).First(&user)
-
+	fmt.Print(user)
 	if user.ID == 0 {
 		c.Status(fiber.StatusNotFound)
 		return c.JSON(fiber.Map{
@@ -191,6 +202,7 @@ func Logout(c *fiber.Ctx) error {
 		"message": "Success",
 	})
 }
+
 func synchronousChatbot(c *fiber.Ctx) error {
     type RequestBody struct {
         Message string `json:"message"`
@@ -229,7 +241,6 @@ func synchronousChatbot(c *fiber.Ctx) error {
     }
 
     // Return the chatbot's response directly to the client
-	println("chatbotResp, ", resp.Body)
     return c.Status(fiber.StatusOK).JSON(chatbotResp)
 }
 

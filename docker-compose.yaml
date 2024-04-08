@@ -35,8 +35,8 @@ services:
     ports:
       - '3000:80'
     volumes:
-      - ./project/frontend/src:/etc/src
-      - ./project/frontend/public:/app/public
+      - ./project/react-auth/src:/etc/src
+      - ./project/react-auth/public:/app/public
     depends_on:
       - backend
     environment:

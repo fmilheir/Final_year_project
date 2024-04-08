@@ -26,7 +26,18 @@ const LoginAdmin: React.FC = () => {
       if (!response.ok) {
         throw new Error("Invalid credentials");
       }
-
+      else { 
+        // get JWT token from response headers
+        const jwtToken = response.json();
+        console.log(document.cookie); // Log the JWT token to the console
+        console.log(response.headers.entries); // Log the JWT token to the console
+        console.log(jwtToken); // Log the JWT token to the console
+        if (jwtToken) {
+          document.cookie = ("jwt="+jwtToken);
+          //localStorage.setItem("jwt", jwtToken);
+          document.cookie = "admin=true";
+        }
+      }
       setRedirect(true);
     } catch (error) {
       setErrorMessage("Invalid email or password. Please try again.");
