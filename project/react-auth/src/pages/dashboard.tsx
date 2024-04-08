@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom'; // Import Link from react-router-dom
 import { Box, Button, Card, CardContent, Typography, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import axios from 'axios'; // Import axios for API requests
+import axios from 'axios';
 
 interface Ticket {
     id: number;
@@ -13,20 +13,18 @@ interface Ticket {
 
 const Dashboard = () => {
     const [tickets, setTickets] = useState<Ticket[]>([]); 
-    const [isLoading, setIsLoading] = useState(true); // Change initial state to true
+    const [isLoading, setIsLoading] = useState(true);
     const [redirect, setRedirect] = useState(false);
-
- 
 
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/tickets'); // Use axios for API request
+                const response = await axios.get('http://localhost:8080/api/tickets');
                 setTickets(response.data);
             } catch (error) {
                 console.error('Error fetching tickets:', error);
             } finally {
-                setIsLoading(false); // Update loading state after fetching
+                setIsLoading(false);
             }
         };
 
@@ -71,6 +69,11 @@ const Dashboard = () => {
                                     <Typography variant="body2">
                                         {ticket.description}
                                     </Typography>
+                                    <Link to={`/edit_ticket/${ticket.id}`} style={{ textDecoration: 'none' }}>
+                                        <Button variant="outlined" color="primary" size="small" sx={{ mt: 2 }}>
+                                            Edit
+                                        </Button>
+                                    </Link>
                                 </CardContent>
                             </Card>
                         ))

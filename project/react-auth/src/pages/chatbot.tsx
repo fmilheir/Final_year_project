@@ -54,6 +54,7 @@ const Chatbot: React.FC = () => {
   };
 
   return (
+    <main>
     <div className="chatbot-container">
       <div className="chat-history">
         {messages.map((message, index) => (
@@ -74,6 +75,7 @@ const Chatbot: React.FC = () => {
         <button type="submit" className="send-button">Send</button>
       </form>
     </div>
+    </main>
   );
 };
 
