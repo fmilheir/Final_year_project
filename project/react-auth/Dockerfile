@@ -10,6 +10,8 @@ COPY package*.json ./
 # Copy the rest of your app's source code from your host to your image filesystem.
 COPY . .
 
+COPY src/ etc/src/
+
 # Install dependencies
 RUN npm install
 

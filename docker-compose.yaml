@@ -35,7 +35,7 @@ services:
     ports:
       - '3000:80'
     volumes:
-      - ./project/frontend/src:/app/src
+      - ./project/frontend/src:/etc/src
       - ./project/frontend/public:/app/public
     depends_on:
       - backend

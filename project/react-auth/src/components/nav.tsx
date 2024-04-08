@@ -11,6 +11,7 @@ interface Props {
 
 const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
   return (
+    <header>
     <Navbar expand="lg" bg="light" variant="light">
       <Container>
         <Navbar.Brand as={Link} to="/">
@@ -45,6 +46,7 @@ const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
+    </header>
   );
 };
 

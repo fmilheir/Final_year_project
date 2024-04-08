@@ -40,15 +40,14 @@ const App: React.FC = () => {
     }
   };
 
-  const isAuthenticated = userData !== null; // Check if user data is fetched
+  const isAuthenticated = false ;// userData !== null; // Check if user data is fetched
 
   return (
     <body>
       <div className="App">
         <Router>
-          <Navigation isAuthenticated={isAuthenticated} />
-          <div className="content">
-            <Routes>
+        <Routes>
+            <Navigation isAuthenticated={isAuthenticated} />
               <Route path="/" element={<Navigate replace to="/home" />} />
               <Route path="/home" element={<Home />} />
               <Route path="/login_admin" element={<LoginAdmin />} />
@@ -65,7 +64,6 @@ const App: React.FC = () => {
               )}
               <Route path="*" element={<Navigate replace to="/home" />} />
             </Routes>
-          </div>
         </Router>
       </div>
     </body>
