@@ -12,3 +12,4 @@ google-api-python-client
 google-auth
 flask_executor
 python-docx
+psycopg2

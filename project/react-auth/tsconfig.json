@@ -6,19 +6,19 @@
       "dom.iterable",
       "esnext"
     ],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
+    "allowJs": true, // Since you're allowing JS files, ensure they follow TypeScript's rules
+    "skipLibCheck": true, // Skipping type checking of all declarations from files in node_modules
+    "esModuleInterop": true, // Simplifies interoperability between CommonJS and ES6 modules
+    "allowSyntheticDefaultImports": true, // Allows default imports from modules with no default export
+    "strict": true, // Enabling strict mode to catch more issues at compile time
+    "forceConsistentCasingInFileNames": true, // Enforces consistent casing in file names
+    "noFallthroughCasesInSwitch": true, // Checks for fall-through cases in switch statements
+    "module": "esnext", // Specifies module code generation
+    "moduleResolution": "node", // Determines how TypeScript resolves module imports
+    "resolveJsonModule": true, // Allows importing JSON modules directly in TypeScript
+    "isolatedModules": true, // Enables strict file-by-file compilation mode
+    "noEmit": true, // Do not emit output files
+    "jsx": "react-jsx" // Configures how JSX should be transformed
   },
   "include": [
     "src"

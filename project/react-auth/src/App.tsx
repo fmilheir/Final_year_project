@@ -46,22 +46,27 @@ const App: React.FC = () => {
       console.error('Error fetching user data:', error);
     }
   };
-  
 
-  const isAuthenticated = userData !== null; // Check if user data is fetched
-
+  const isAuthenticated = userData.email ? true : false;
+  const firstName = userData.firstName ? userData.firstName : '';
   return (
     <div className="App">
       <Router>
         <header>
-          <Navigation isAuthenticated={isAuthenticated} />
+          <Navigation isAuthenticated={isAuthenticated}  firstName={firstName}/>
         </header>
         <Routes>
           <Route path="/" element={<Navigate replace to="/home" />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login_admin" element={<LoginAdmin />} />
-          <Route path="/login_user" element={<LoginUser />} />
-          <Route path="/signup" element={<Signup />} />
+          {!isAuthenticated && (
+            <>
+            <Route path="/home" element={<Home />} />
+            <Route path="/login_admin" element={<LoginAdmin />} />
+            <Route path="/login_user" element={<LoginUser />} />
+            <Route path="/signup" element={<Signup />} />
+            </>
+            )
+        }
+
           {isAuthenticated ? (
             <>
               <Route path="/dashboard" element={<Dashboard />} />

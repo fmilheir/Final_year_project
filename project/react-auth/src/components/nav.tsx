@@ -7,7 +7,26 @@ import '../css/nav.css'; // Import custom CSS styles
 
 interface Props {
   isAuthenticated: boolean;
+  firstName: string;
 }
+
+  const handleLogout = async () => {
+    try {
+      // Make a request to the logout endpoint
+      const response = await fetch('http://localhost:8080/api/logout', {
+        method: 'POST',
+        credentials: 'include', // Include cookies in the request
+      });
+      if (!response.ok) {
+        throw new Error('Failed to logout');
+      }
+      // Redirect the user to the login page after successful logout
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
+  };
+
 
 const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
   return (
@@ -29,11 +48,12 @@ const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
             )}
           </Nav>
           <Nav>
-            {isAuthenticated ? (
+          {isAuthenticated ? (
               <NavDropdown title={<img src={profileIcon} alt="Profile" className="profile-icon" width="32" height="32" />} id="profile-dropdown">
                 <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
                 <NavDropdown.Divider />
-                <NavDropdown.Item as={Link} to="/logout">Sign out</NavDropdown.Item>
+                {/* Call handleLogout when "Sign out" is clicked */}
+                <NavDropdown.Item onClick={handleLogout}>Sign out</NavDropdown.Item>
               </NavDropdown>
             ) : (
               <div className="d-flex">

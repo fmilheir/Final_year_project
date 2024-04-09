@@ -216,7 +216,7 @@ func User(c *fiber.Ctx) error {
 		fmt.Println(userID)
 	
 		// Query the database to find the user by ID
-		var user models.User
+		var user models.Admin
 		if err := database.DB.Db.First(&user, userID).Error; err != nil {
 			c.Status(fiber.StatusNotFound)
 			return c.JSON(fiber.Map{
@@ -233,17 +233,20 @@ func User(c *fiber.Ctx) error {
 	}	
 
 
-func Logout(c *fiber.Ctx) error {
-	c.Cookie(&fiber.Cookie{
-		Name:     "jwt",
-		Value:    "",
-		Expires:  time.Now().Add(-time.Hour),
-		HTTPOnly: true,
-	})
-	return c.JSON(fiber.Map{
-		"message": "Success",
-	})
-}
+	func Logout(c *fiber.Ctx) error {
+		// Clear the JWT token cookie by setting an empty value and expiration in the past
+		c.Cookie(&fiber.Cookie{
+			Name:     "jwt",
+			Value:    "",
+			Expires:  time.Now().Add(-time.Hour), // Set expiration to past time
+			HTTPOnly: true,
+		})
+	
+		// Return success message
+		return c.JSON(fiber.Map{
+			"message": "Logout successful",
+		})
+	}
 
 func synchronousChatbot(c *fiber.Ctx) error {
     type RequestBody struct {

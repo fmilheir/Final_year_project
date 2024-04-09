@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from chat_bot import DocumentChatbot
 import sys
 #import google_chat
-#import test
+import connection
 
 app = Flask(__name__)
 
@@ -10,6 +10,11 @@ chatbot = DocumentChatbot()
 def main():
     #test.test_bot()
     print("chatbot runing...", "*"*50 ,file=sys.stderr)
+    data = connection.retrieve_data()
+    if data:
+        connection.save_to_txt(data)
+    else:
+        print("No data retrieved.")
     run_flask_app() 
     #chat_bot.run()
     #google_chat.main()

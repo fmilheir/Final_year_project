@@ -75,7 +75,7 @@ class DocumentChatbot:
         self.index = None
         self.qa = None
         self.index_path = "/usr/src/app/Gpt4all/full_sotu_index"    
-        self.local_path = '/usr/src/app/Gpt4all/mistral-7b-openorca.Q4_0.gguf'
+        self.local_path = '/usr/src/app/Gpt4all/mistral-7b-openorca.Q8_0.gguf'
         self.model_path = '/usr/src/app/Gpt4all/llama-2-7b-chat.Q4_0.gguf'
         self.directory_path = "/usr/src/app/Pdf"
 
