@@ -25,7 +25,8 @@ func main() {
 	app.Use(cors.New(cors.Config{
 		AllowCredentials: true,
 		ExposeHeaders:    "set-cookie",
-		
+		AllowOrigins:     "*",
+		AllowMethods:     "GET, POST, PUT, DELETE",
 	}))
 
 	routes.Setup(app)

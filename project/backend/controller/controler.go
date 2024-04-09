@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"time"
 	"fmt"
+	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fmilheir/final_year_project/backend/database"
@@ -50,7 +51,8 @@ func Register_admin(c *fiber.Ctx) error {
 	}
 
 	user := models.Admin{
-		Username:  data["username"],
+		FirstName:  data["FirstName"],
+		LastName:   data["LastName"],
 		Email:     data["email"],
 		Password:  password,
 		CompanyID: company.ID,
@@ -66,6 +68,13 @@ func Register_user(c *fiber.Ctx) error {
 		return err
 	}
 
+	if data["firstName"] == "" || data["lastName"] == "" || data["email"] == "" || data["password"] == "" {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Bad request please fill in all fields",
+		})
+	}
+
 	// Hash the password
 	password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
 	if err != nil {
@@ -73,7 +82,8 @@ func Register_user(c *fiber.Ctx) error {
 	}
 
 	user := models.User{
-		Username:  data["username"],
+		FirstName:  data["FirstName"],
+		LastName:   data["LastName"],
 		Email:     data["email"],
 		Password:  password,
 		CompanyID: 1,
@@ -175,21 +185,53 @@ func Login_user(c *fiber.Ctx) error {
 }
 
 func User(c *fiber.Ctx) error {
-	cookie := c.Cookies("jwt")
-	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("JWT_SECRET")), nil
-	})
-	if err != nil || !token.Valid {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"message": "Unauthenticated",
+		// Get the Authorization header from the request
+		authorizationHeader := c.Get("Authorization")
+	
+		// Check if Authorization header exists and has the expected format
+		if authorizationHeader == "" || !strings.HasPrefix(authorizationHeader, "Bearer ") {
+			c.Status(fiber.StatusBadRequest)
+			return c.JSON(fiber.Map{
+				"message": "Invalid Authorization header",
+			})
+		}
+	
+		// Extract the JWT token from the Authorization header
+		token := strings.TrimPrefix(authorizationHeader, "Bearer ")
+	
+		// Parse and validate the JWT token
+		claims := &jwt.StandardClaims{}
+		_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+			return []byte(os.Getenv("JWT_SECRET")), nil
 		})
-	}
-	claims := token.Claims.(*jwt.StandardClaims)
-	var user models.User
-	database.DB.Db.Where("id = ?", claims.Issuer).First(&user)
-	return c.JSON(user)
-}
+		if err != nil {
+			c.Status(fiber.StatusUnauthorized)
+			return c.JSON(fiber.Map{
+				"message": "Invalid token",
+			})
+		}
+	
+		// Extract user ID from token claims
+		userID := claims.Issuer
+		fmt.Println(userID)
+	
+		// Query the database to find the user by ID
+		var user models.User
+		if err := database.DB.Db.First(&user, userID).Error; err != nil {
+			c.Status(fiber.StatusNotFound)
+			return c.JSON(fiber.Map{
+				"message": "User not found",
+			})
+		}
+	
+		// Return the user's first name along with other necessary information
+		return c.JSON(fiber.Map{
+			"firstName": user.FirstName,
+			"email": user.Email, // You can include other user information as needed
+			// Add more fields as necessary
+		})
+	}	
+
 
 func Logout(c *fiber.Ctx) error {
 	c.Cookie(&fiber.Cookie{

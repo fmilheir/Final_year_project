@@ -27,8 +27,8 @@ const LoginAdmin: React.FC = () => {
         throw new Error("Invalid credentials");
       }
       else { 
-        // get JWT token from response headers
-        const jwtToken = response.json();
+        const data = await response.json();
+        const jwtToken = data.token;
         console.log(document.cookie); // Log the JWT token to the console
         console.log(response.headers.entries); // Log the JWT token to the console
         console.log(jwtToken); // Log the JWT token to the console

@@ -14,7 +14,8 @@ import(
 	
 	type Admin struct {
 		gorm.Model
-		Username  string  `gorm:"unique;not null"`
+		FirstName  string  `gorm:"not null"`
+		LastName   string  `gorm:"not null"`
 		Email     string  `gorm:"unique;not null"`
 		Password  []byte  `gorm:"not null"`
 		CompanyID uint    `gorm:"index"`
@@ -22,7 +23,8 @@ import(
 	
 	type User struct {
 		gorm.Model
-		Username  string  `gorm:"unique;not null"`
+		FirstName  string  `gorm:"not null"`
+		LastName   string  `gorm:"not null"`
 		Email     string  `gorm:"unique;not null"`
 		Password  []byte  `gorm:"not null"`
 		CompanyID uint    `gorm:"index"`
