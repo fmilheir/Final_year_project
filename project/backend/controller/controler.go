@@ -237,6 +237,7 @@ func User(c *fiber.Ctx) error {
 	
 		// Return the user's first name along with other necessary information
 		return c.JSON(fiber.Map{
+			"ID": user.ID,
 			"role": user.Role,
 			"firstName": user.FirstName,
 			"email": user.Email, // You can include other user information as needed
@@ -337,18 +338,28 @@ func getCompanyID(c *fiber.Ctx) error {
 	userID := claims.Issuer
 	fmt.Println(userID)
 
-	// Query the database to find the user by ID
-	var user models.Admin
-	if err := database.DB.Db.First(&user, userID).Error; err != nil {
-		c.Status(fiber.StatusNotFound)
-		return c.JSON(fiber.Map{
-			"message": "User not found",
-		})
+		// Query the database to find the user by ID
+	var admin models.Admin
+	var user models.User
+	if err := database.DB.Db.First(&admin, userID).Error; err != nil {
+		if err := database.DB.Db.First(&user, userID).Error; err != nil {
+			c.Status(fiber.StatusNotFound)
+			return c.JSON(fiber.Map{
+				"message": "User not found",
+			})
+		}
 	}
 
-	// Return the user's first name along with other necessary information
+	// Return the user's company ID
+	var companyID uint
+	if admin.ID != 0 {
+		companyID = admin.CompanyID
+	} else {
+		companyID = user.CompanyID
+	}
 	return c.JSON(fiber.Map{
-		"companyID": user.CompanyID,
-		"message": "Company ID retrieved",
+		"companyID": companyID,
+		"message":   "Company ID retrieved",
 	})
+
 }

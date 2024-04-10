@@ -8,6 +8,7 @@ import LoginUser from './pages/login_user';
 import Dashboard from './pages/dashboard';
 import Chatbot from './pages/chatbot';
 import CreateTicketForm from './pages/create_ticket';
+import AdminPanel from './pages/admin_panel';
 import './App.css';
 
 const App: React.FC = () => {
@@ -73,6 +74,9 @@ const App: React.FC = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="/create_ticket" element={<CreateTicketForm />} />
+              {isAdmin && (
+                <Route path="admin_panel" element={<AdminPanel userID={userData.ID}/>} />
+              )}
             </>
           ) : (
             <Route path="*" element={<Navigate replace to="/home" />} />

@@ -7,7 +7,11 @@ interface User {
   role: string;
 }
 
-const AdminPanel: React.FC = () => {
+interface Props {
+  userID: number;
+}
+
+const AdminPanel: React.FC<Props> =({ userID }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState<User>({ id: 0, username: '', email: '', role: '' });
 
@@ -19,6 +23,24 @@ const AdminPanel: React.FC = () => {
       setUsers(data);
     } catch (error) {
       console.error('Error fetching users:', error);
+    }
+  };
+
+   // Function to fetch company ID from the server
+   const fetchCompanyId = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/getCompanyId', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userID }),
+      });
+      const data = await response.json();
+      return data.companyId;
+    } catch (error) {
+      console.error('Error fetching company ID:', error);
+      return null;
     }
   };
 
