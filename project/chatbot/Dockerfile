@@ -18,8 +18,8 @@ COPY Code/ /usr/src/app/Code
 
 COPY Pdf/ /usr/src/app/Pdf
 
-#debug
-RUN ls -l /usr/src/app/Gpt4all
+# Set execute permission to the script
+RUN chmod +x /usr/src/app/rebuild_chatbot_container.sh
 
 # Command to run on container start
 CMD ["python", "Code/main.py"]

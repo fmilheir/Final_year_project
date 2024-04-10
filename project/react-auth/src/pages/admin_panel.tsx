@@ -26,7 +26,7 @@ const AdminPanel: React.FC = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      const endpoint = newUser.role === 'admin' ? 'http://localhost:8080/api/register_admin' : 'http://localhost:8080/api/register_user';
+      const endpoint = 'http://localhost:8080/api/register_user';
       const response = await fetch(endpoint, {
         method: 'POST',
         headers: {

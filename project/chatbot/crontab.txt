@@ -1,0 +1,1 @@
+0 12 * * 0 /app/rebuild_chatbot_container.sh

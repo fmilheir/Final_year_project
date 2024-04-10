@@ -19,6 +19,7 @@ import(
 		Email     string  `gorm:"unique;not null"`
 		Password  []byte  `gorm:"not null"`
 		CompanyID uint    `gorm:"index"`
+		Role       string `gorm:"default:admin"`
 	}
 	
 	type User struct {
@@ -28,5 +29,6 @@ import(
 		Email     string  `gorm:"unique;not null"`
 		Password  []byte  `gorm:"not null"`
 		CompanyID uint    `gorm:"index"`
+		Role 	string  `gorm:"not null"`
 	}
 	

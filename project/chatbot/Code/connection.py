@@ -3,6 +3,7 @@ import os
 import sys
 
 def retrieve_data():
+    
     # PostgreSQL connection parameters
     conn_params = {
         "host": "db",

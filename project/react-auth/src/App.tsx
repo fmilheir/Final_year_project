@@ -49,6 +49,7 @@ const App: React.FC = () => {
 
   const isAuthenticated = userData.email ? true : false;
   const firstName = userData.firstName ? userData.firstName : '';
+  const isAdmin = userData.role === 'admin' ? true : false;
   return (
     <div className="App">
       <Router>
