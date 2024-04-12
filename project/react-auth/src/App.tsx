@@ -72,15 +72,10 @@ const App: React.FC = () => {
             <Route path="/login_user" element={<LoginUser />} />
             <Route path="/signup" element={<Signup />} />
             </>
-            ) : (
-              <Route path="*" element={<Navigate replace to="/dashboard"/>}/>
-            )
+            ) 
           }
-
           {isAuthenticated ? (
             <>
-             <Navigate to="/dashboard" replace />
-             
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="/create_ticket" element={<CreateTicketForm />} />
@@ -88,9 +83,9 @@ const App: React.FC = () => {
                 <Route path="admin_panel" element={<AdminPanel userID={userData.ID}/>} />
               )}
             </>
-          ) : (
-            <Route path="*" element={<Navigate replace to="/home" />} />
-          )}
+          ) 
+          : null}
+          <Route path="*" element={<Navigate replace to="/home" />} />
         </Routes>
       </Router>
     </div>
