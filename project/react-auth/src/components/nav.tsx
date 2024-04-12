@@ -22,6 +22,7 @@ interface Props {
       }
       // Redirect the user to the login page after successful logout
       window.location.href = '/login';
+      window.location.reload();
     } catch (error) {
       console.error('Error logging out:', error);
     }

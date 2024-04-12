@@ -36,6 +36,7 @@ const LoginAdmin: React.FC = () => {
           document.cookie = ("jwt="+jwtToken);
           //localStorage.setItem("jwt", jwtToken);
           document.cookie = "admin=true";
+          window.location.reload();
         }
       }
       setRedirect(true);

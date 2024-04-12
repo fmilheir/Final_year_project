@@ -28,9 +28,6 @@ RUN go mod download
 # Copy the source from the current directory to the Working Directory inside the container.
 COPY . .
 
-# Copy TLS certificates into the container
-COPY ./certificates /usr/src/app/certificates
-
 
 # Expose port 8080 to the outside world.
 EXPOSE 8080

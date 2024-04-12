@@ -48,9 +48,15 @@ const App: React.FC = () => {
     }
   };
 
-  const isAuthenticated = userData.email ? true : false;
-  const firstName = userData.firstName ? userData.firstName : '';
-  const isAdmin = userData.role === 'admin' ? true : false;
+  const isAuthenticated = userData !== null;
+  const firstName = userData?.firstName || '';
+  const isAdmin = userData?.role === 'admin';
+
+  console.log(userData);
+  console.log(isAuthenticated);
+  console.log(firstName);
+  console.log(isAdmin);
+
   return (
     <div className="App">
       <Router>
@@ -66,11 +72,15 @@ const App: React.FC = () => {
             <Route path="/login_user" element={<LoginUser />} />
             <Route path="/signup" element={<Signup />} />
             </>
+            ) : (
+              <Route path="*" element={<Navigate replace to="/dashboard"/>}/>
             )
-        }
+          }
 
           {isAuthenticated ? (
             <>
+             <Navigate to="/dashboard" replace />
+             
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/chatbot" element={<Chatbot />} />
               <Route path="/create_ticket" element={<CreateTicketForm />} />
@@ -81,7 +91,6 @@ const App: React.FC = () => {
           ) : (
             <Route path="*" element={<Navigate replace to="/home" />} />
           )}
-          <Route path="*" element={<Navigate replace to="/home" />} />
         </Routes>
       </Router>
     </div>

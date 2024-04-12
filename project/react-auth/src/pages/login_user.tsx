@@ -32,8 +32,9 @@ const LoginUser = () => {
         console.log(data.jwt); // Log the JWT token to the console
         const jwtToken = data.jwt;
         document.cookie = jwtToken;
-        localStorage.setItem("jwt", jwtToken);
+       // localStorage.setItem("jwt", jwtToken);
         document.cookie = "user=true";
+        window.location.reload();
       }
 
       setRedirect(true);

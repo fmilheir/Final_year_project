@@ -57,6 +57,21 @@ services:
     #env_file:
     #  - ./project/chatbot/.env
     #command: ["sh", "-c", "crontab /app/crontab.txt && cron -f"]
+  ticketing:
+    build:
+      context: ./project/ticketing
+      dockerfile: Dockerfile
+    ports:
+      - "3030:3030"
+    environment:
+      - GIN_MODE=debug
+      - SSL_CERT_FILE=/etc/ssl/certs/cert.pem
+      - SSL_KEY_FILE=/etc/ssl/private/key.pem
+    env_file:
+      - project/ticketing/.env
+    volumes:
+      - ./cmd/tmf724incident-server/cert.pem:/etc/ssl/certs/cert.pem
+      - ./cmd/tmf724incident-server/key.pem:/etc/ssl/private/key.pem
 
 volumes:
   postgres-data:

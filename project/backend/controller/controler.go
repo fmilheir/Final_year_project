@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"strings"
 
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/fmilheir/final_year_project/backend/database"
 	"github.com/fmilheir/final_year_project/backend/models"
@@ -243,10 +244,10 @@ func User(c *fiber.Ctx) error {
 			"email": user.Email, // You can include other user information as needed
 			// Add more fields as necessary
 		})
-	}	
+}	
 
 
-	func Logout(c *fiber.Ctx) error {
+func Logout(c *fiber.Ctx) error {
 		// Clear the JWT token cookie by setting an empty value and expiration in the past
 		c.Cookie(&fiber.Cookie{
 			Name:     "jwt",
@@ -259,7 +260,7 @@ func User(c *fiber.Ctx) error {
 		return c.JSON(fiber.Map{
 			"message": "Logout successful",
 		})
-	}
+}
 
 func synchronousChatbot(c *fiber.Ctx) error {
     type RequestBody struct {
@@ -302,12 +303,7 @@ func synchronousChatbot(c *fiber.Ctx) error {
     return c.Status(fiber.StatusOK).JSON(chatbotResp)
 }
 
-func MyHandler(c *fiber.Ctx) error {
-    return synchronousChatbot(c)
-}
-
-
-func getCompanyID(c *fiber.Ctx) error {
+func GetCompanyID(c *fiber.Ctx) error {
 	// Get the Authorization header from the request
 	authorizationHeader := c.Get("Authorization")
 
@@ -361,5 +357,8 @@ func getCompanyID(c *fiber.Ctx) error {
 		"companyID": companyID,
 		"message":   "Company ID retrieved",
 	})
+}
 
+func MyHandler(c *fiber.Ctx) error {
+    return synchronousChatbot(c)
 }
