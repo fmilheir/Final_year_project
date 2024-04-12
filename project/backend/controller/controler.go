@@ -91,6 +91,7 @@ func Register_user(c *fiber.Ctx) error {
 			LastName:   data["LastName"],
 			Email:     data["email"],
 			Password:  password,
+			Role: 	data["role"],
 			CompanyID: uint(companyID),
 		}
 		// Create a new record

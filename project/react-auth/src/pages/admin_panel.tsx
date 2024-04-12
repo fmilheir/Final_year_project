@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 
 interface User {
+  firstName: string;
+  lastName: string;
   id: number;
-  username: string;
   email: string;
+  password: string;
   role: string;
 }
 
@@ -13,7 +15,7 @@ interface Props {
 
 const AdminPanel: React.FC<Props> =({ userID }) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUser, setNewUser] = useState<User>({ id: 0, username: '', email: '', role: '' });
+  const [newUser, setNewUser] = useState<User>({ id: 0, firstName: '', lastName: '', email: '', role: '', password: '' });
 
   // Function to fetch existing users from the server
   const fetchUsers = async () => {
@@ -60,7 +62,7 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
         // Refresh user list after successfully adding new user
         fetchUsers();
         // Clear input fields
-        setNewUser({ id: 0, username: '', email: '', role: '' });
+        setNewUser({ id: 0, firstName: '', lastName: '', email: '', role: '', password: '' });
       } else {
         console.error('Failed to create user');
       }
@@ -91,7 +93,7 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
         <ul>
           {users.map((user) => (
             <li key={user.id}>
-              Username: {user.username}, Email: {user.email}, Role: {user.role}
+              Username: {user.firstName}, Email: {user.email}, Role: {user.role}
             </li>
           ))}
         </ul>
@@ -99,8 +101,10 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
       <div>
         <h3>Create New User</h3>
         <form onSubmit={handleSubmit}>
-          <input type="text" name="username" value={newUser.username} placeholder="Username" onChange={handleInputChange} />
+          <input type="text" name="firstName" value={newUser.firstName} placeholder="firstName" onChange={handleInputChange} />
+          <input type="text" name="lastName" value={newUser.lastName} placeholder="lastName" onChange={handleInputChange} />
           <input type="email" name="email" value={newUser.email} placeholder="Email" onChange={handleInputChange} />
+          <input type="password" name="password" value={newUser.password} placeholder="Password" onChange={handleInputChange} />
           <select name="role" value={newUser.role} onChange={handleInputChange}>
             <option value="admin">Admin</option>
             <option value="normal">Normal</option>

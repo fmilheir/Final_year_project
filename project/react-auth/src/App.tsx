@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Navigation from './components/nav';
 import Home from './pages/home';
+import Profile from './pages/profile';
 import LoginAdmin from './pages/login_admin';
 import Signup from './pages/signup';
 import LoginUser from './pages/login_user';
@@ -51,41 +52,37 @@ const App: React.FC = () => {
   const isAuthenticated = userData !== null;
   const firstName = userData?.firstName || '';
   const isAdmin = userData?.role === 'admin';
+  const userID = userData?.ID;
 
   console.log(userData);
   console.log(isAuthenticated);
   console.log(firstName);
   console.log(isAdmin);
 
+
   return (
     <div className="App">
       <Router>
         <header>
-          <Navigation isAuthenticated={isAuthenticated}  firstName={firstName}/>
+          <Navigation isAuthenticated={isAuthenticated} firstName={firstName} />
         </header>
         <Routes>
-          <Route path="/" element={<Navigate replace to="/home" />} />
+        <Route path="/" element={<Navigate replace to="/home" />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login_admin" element={<LoginAdmin />} />
+          <Route path="/login_user" element={<LoginUser />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/chatbot" element={<Chatbot />} />
+          <Route path="/create_ticket" element={<CreateTicketForm />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/admin_panel" element={<AdminPanel userID={userID} />} />
+          {/* Redirect unauthorized users trying to access protected routes */}
           {!isAuthenticated && (
             <>
-            <Route path="/home" element={<Home />} />
-            <Route path="/login_admin" element={<LoginAdmin />} />
-            <Route path="/login_user" element={<LoginUser />} />
-            <Route path="/signup" element={<Signup />} />
+              <Route path="*" element={<Navigate replace to="/home" />} />
             </>
-            ) 
-          }
-          {isAuthenticated ? (
-            <>
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/chatbot" element={<Chatbot />} />
-              <Route path="/create_ticket" element={<CreateTicketForm />} />
-              {isAdmin && (
-                <Route path="admin_panel" element={<AdminPanel userID={userData.ID}/>} />
-              )}
-            </>
-          ) 
-          : null}
-          <Route path="*" element={<Navigate replace to="/home" />} />
+          )}
         </Routes>
       </Router>
     </div>
