@@ -1,4 +1,5 @@
 import React, { SyntheticEvent, useState } from "react";
+import '../css/nav.css';
 
 const Profile = () => {
     return (
@@ -13,10 +14,16 @@ const Profile = () => {
                         <div className="card">
                             <div className="card-body">
                                 <h5 className="card-title">User Information</h5>
-                                <p className="card-text">First Name: John</p>
-                                <p className="card-text">Last Name: Doe</p>
-                                <p className="card-text">Email:doe@gmail .com</p>
-                                <p className="card-text">Role: Admin</p>
+                                <div className="user-info">
+                                    <p><strong>First Name:</strong> John</p>
+                                    <p><strong>Last Name:</strong> Doe</p>
+                                    <p><strong>Email:</strong> doe@gmail.com</p>
+                                    <p><strong>Role:</strong> Admin</p>
+                                </div>
+                            </div>
+                            <div className="card-footer d-flex justify-content-between">
+                                <button className="btn btn-primary">Edit Profile</button>
+                                <button className="btn btn-danger">Delete Profile</button>
                             </div>
                         </div>
                     </div>
@@ -25,5 +32,4 @@ const Profile = () => {
         </main>
     );
 }
-
 export default Profile;

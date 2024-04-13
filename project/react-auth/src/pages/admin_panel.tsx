@@ -1,35 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+import React, { useState, useEffect, ChangeEvent } from 'react';
+import '../css/admin_panel.css';
+
 
 interface User {
   firstName: string;
   lastName: string;
-  id: number;
   email: string;
   password: string;
   role: string;
+  id?: number;
+  FirstName?: string;
+  LastName?: string;
+  Email?: string;
+  Role?: string;
 }
 
 interface Props {
   userID: number;
 }
 
-const AdminPanel: React.FC<Props> =({ userID }) => {
+const AdminPanel: React.FC<Props> = ({ userID }) => {
   const [users, setUsers] = useState<User[]>([]);
-  const [newUser, setNewUser] = useState<User>({ id: 0, firstName: '', lastName: '', email: '', role: '', password: '' });
+  const [newUser, setNewUser] = useState<User>({ firstName: '', lastName: '', email: '', role: 'admin', password: '' });
+  const [companyId, setCompanyId] = useState<number | null>(null);
 
-  // Function to fetch existing users from the server
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch('http://localhost:8080/api/users');
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-    }
-  };
-
-   // Function to fetch company ID from the server
-   const fetchCompanyId = async () => {
+  // Function to fetch company ID from the server
+  const fetchCompanyId = async () => {
     try {
       const response = await fetch('http://localhost:8080/api/getCompanyId', {
         method: 'POST',
@@ -39,10 +43,27 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
         body: JSON.stringify({ userID }),
       });
       const data = await response.json();
-      return data.companyId;
+      setCompanyId(data.companyID);
+      fetchUsers(data.companyID.toString());
     } catch (error) {
       console.error('Error fetching company ID:', error);
-      return null;
+    }
+  };
+
+  // Function to fetch existing users from the server
+  const fetchUsers = async (companyid: string | null) => {
+    try {
+      const response = await fetch('http://localhost:8080/api/get_users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ companyid }),
+      });
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
     }
   };
 
@@ -56,13 +77,13 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify({ ...newUser, companyID: companyId?.toString() }),
       });
       if (response.ok) {
-        // Refresh user list after successfully adding new user
-        fetchUsers();
-        // Clear input fields
-        setNewUser({ id: 0, firstName: '', lastName: '', email: '', role: '', password: '' });
+        const companyID = companyId?.toString() || null;
+        fetchUsers(companyID);
+        setNewUser({ firstName: '', lastName: '', email: '', role: '', password: '' });
+        setCompanyId(null);
       } else {
         console.error('Failed to create user');
       }
@@ -71,8 +92,7 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
     }
   };
 
-  // Function to handle input changes for new user form
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setNewUser((prevUser) => ({
       ...prevUser,
@@ -80,39 +100,127 @@ const AdminPanel: React.FC<Props> =({ userID }) => {
     }));
   };
 
+  const handleRoleChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const { value } = event.target;
+    setNewUser((prevUser) => ({
+      ...prevUser,
+      role: value,
+    }));
+  };
+
+
+  // Function to handle editing a user
+  const handleEdit = (user: User) => {
+    // Logic to handle editing a user
+    console.log('Editing user:', user);
+  };
+
+  // Function to handle deleting a user
+  const handleDelete = (user: User) => {
+    // Logic to handle deleting a user
+    console.log('Deleting user:', user);
+  };
+
   useEffect(() => {
-    // Fetch users when component mounts
-    fetchUsers();
+    fetchCompanyId();
   }, []);
 
-  return (
-    <div>
-      <h2>Admin Panel</h2>
-      <div>
-        <h3>Existing Users</h3>
-        <ul>
-          {users.map((user) => (
-            <li key={user.id}>
-              Username: {user.firstName}, Email: {user.email}, Role: {user.role}
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div>
-        <h3>Create New User</h3>
+return (
+<main className="admin-panel-container">
+      <section>
+        <h2 className="section-header">Existing Users</h2>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>First Name</TableCell>
+              <TableCell>Last Name</TableCell>
+              <TableCell>Email</TableCell>
+              <TableCell>Role</TableCell>
+              <TableCell>Edit</TableCell>
+              <TableCell>Delete</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {users.map((user) => (
+              <TableRow key={user.id}>
+                <TableCell>{user.FirstName}</TableCell>
+                <TableCell>{user.LastName}</TableCell>
+                <TableCell>{user.Email}</TableCell>
+                <TableCell>{user.Role}</TableCell>
+                <TableCell>
+                  <Button variant="outlined" color="primary" onClick={() => handleEdit(user)}>
+                    Edit
+                  </Button>
+                </TableCell>
+                <TableCell>
+                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(user)}>
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </section>
+      <section>
+        <h2 className="section-header">Create New User</h2>
         <form onSubmit={handleSubmit}>
-          <input type="text" name="firstName" value={newUser.firstName} placeholder="firstName" onChange={handleInputChange} />
-          <input type="text" name="lastName" value={newUser.lastName} placeholder="lastName" onChange={handleInputChange} />
-          <input type="email" name="email" value={newUser.email} placeholder="Email" onChange={handleInputChange} />
-          <input type="password" name="password" value={newUser.password} placeholder="Password" onChange={handleInputChange} />
-          <select name="role" value={newUser.role} onChange={handleInputChange}>
-            <option value="admin">Admin</option>
-            <option value="normal">Normal</option>
-          </select>
-          <button type="submit">Create User</button>
+          <div className="form-input">
+            <label htmlFor="firstName" className="form-label">First Name:</label>
+            <input
+              type="text"
+              id="firstName"
+              name="firstName"
+              value={newUser.firstName}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="lastName" className="form-label">Last Name:</label>
+            <input
+              type="text"
+              id="lastName"
+              name="lastName"
+              value={newUser.lastName}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="email" className="form-label">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={newUser.email}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="password" className="form-label">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={newUser.password}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-input">
+            <label htmlFor="role" className="form-label">Role:</label>
+            <select
+              id="role"
+              name="role"
+              value={newUser.role}
+              onChange={handleRoleChange}
+            >
+              <option value="admin">Admin</option>
+              <option value="normal">Normal</option>
+            </select>
+          </div>
+          <button type="submit" className="btn btn-primary">Create User</button>
         </form>
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 

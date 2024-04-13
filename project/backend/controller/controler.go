@@ -69,7 +69,7 @@ func Register_user(c *fiber.Ctx) error {
 		return err
 	}
 
-	if data["firstName"] == "" || data["lastName"] == "" || data["email"] == "" || data["password"] == "" {
+	if data["firstName"] == "" || data["lastName"] == "" || data["email"] == "" || data["password"] == "" || data["role"] == "" || data["companyID"] == ""{
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "Bad request please fill in all fields",
@@ -81,28 +81,28 @@ func Register_user(c *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-
+	fmt.Println(data)
 	companyIDStr := data["companyID"]
 	companyID, err := strconv.Atoi(companyIDStr)
 
 	if err != nil {
-		user := models.User{
-			FirstName:  data["FirstName"],
-			LastName:   data["LastName"],
-			Email:     data["email"],
-			Password:  password,
-			Role: 	data["role"],
-			CompanyID: uint(companyID),
-		}
-		// Create a new record
-		database.DB.Db.Create(&user)
-		return c.JSON(user)
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid company ID",
+		})
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "User not created, error parsing company ID",
-	})
-	
+	user := models.User{
+		FirstName:  data["firstName"],
+		LastName:   data["lastName"],
+		Email:     data["email"],
+		Password:  password,
+		Role: 	data["role"],
+		CompanyID: uint(companyID),
+	}
+	// Create a new record
+	database.DB.Db.Create(&user)
+	return c.JSON(user)
 }
 
 func Login_admin(c *fiber.Ctx) error {
@@ -305,39 +305,18 @@ func synchronousChatbot(c *fiber.Ctx) error {
 }
 
 func GetCompanyID(c *fiber.Ctx) error {
-	// Get the Authorization header from the request
-	authorizationHeader := c.Get("Authorization")
 
-	// Check if Authorization header exists and has the expected format
-	if authorizationHeader == "" || !strings.HasPrefix(authorizationHeader, "Bearer ") {
-		c.Status(fiber.StatusBadRequest)
-		return c.JSON(fiber.Map{
-			"message": "Invalid Authorization header",
-		})
-	}
-
-	// Extract the JWT token from the Authorization header
-	token := strings.TrimPrefix(authorizationHeader, "Bearer ")
-
-	// Parse and validate the JWT token
-	claims := &jwt.StandardClaims{}
-	_, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(os.Getenv("JWT_SECRET")), nil
-	})
-	if err != nil {
-		c.Status(fiber.StatusUnauthorized)
-		return c.JSON(fiber.Map{
-			"message": "Invalid token",
-		})
-	}
-
-	// Extract user ID from token claims
-	userID := claims.Issuer
-	fmt.Println(userID)
-
-		// Query the database to find the user by ID
+	// get user id from body
+	var data map[string]string
 	var admin models.Admin
 	var user models.User
+
+
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userID := data["userID"]
+	
 	if err := database.DB.Db.First(&admin, userID).Error; err != nil {
 		if err := database.DB.Db.First(&user, userID).Error; err != nil {
 			c.Status(fiber.StatusNotFound)
@@ -358,6 +337,122 @@ func GetCompanyID(c *fiber.Ctx) error {
 		"companyID": companyID,
 		"message":   "Company ID retrieved",
 	})
+}
+
+func GetCompanyUsers(c *fiber.Ctx) error {
+	// Get the company ID from the request body
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	companyIDStr := data["companyid"]
+	companyID, err := strconv.Atoi(companyIDStr)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid company ID",
+			"companyID": companyIDStr,
+		})
+	}
+
+	// Query the database to find all users in the company
+	var users []models.User
+	if err := database.DB.Db.Where("company_id = ?", companyID).Find(&users).Error; err != nil {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "error retrieving users",
+		})
+	}
+	if len(users) == 0 {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "No users found",
+		})
+	}
+
+	// Return the list of users
+	return c.JSON(users)
+}
+
+ func DeleteUser(c *fiber.Ctx) error {
+	// Get the user ID from the request body
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userIDStr := data["userID"]
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid user ID",
+		})
+	}
+	
+	// Query the database to find the user by ID
+	var user models.User
+	if err := database.DB.Db.First(&user, userID).Error; err != nil {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
+
+	// Delete the user
+	database.DB.Db.Delete(&user)
+	return c.JSON(fiber.Map{
+		"message": "User deleted",
+	})
+}
+
+func UpdateUser(c *fiber.Ctx) error {
+	// Get the user ID from the request body
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userIDStr := data["userID"]
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid user ID",
+		})
+	}
+
+	// Query the database to find the user by ID
+	var user models.User
+	if err := database.DB.Db.First(&user, userID).Error; err != nil {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
+
+	// Update the user's information
+	if data["firstName"] != "" {
+		user.FirstName = data["firstName"]
+	}
+	if data["lastName"] != "" {
+		user.LastName = data["lastName"]
+	}
+	if data["email"] != "" {
+		user.Email = data["email"]
+	}
+	if data["role"] != "" {
+		user.Role = data["role"]
+	}
+	if data["password"] != "" {
+		password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
+		if err != nil {
+			return err
+		}
+		user.Password = password
+	}
+
+	// Save the updated user information
+	database.DB.Db.Save(&user)
+	return c.JSON(user)
 }
 
 func MyHandler(c *fiber.Ctx) error {

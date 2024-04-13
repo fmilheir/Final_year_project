@@ -12,6 +12,9 @@ func Setup(app *fiber.App) {
 	app.Post("/api/login_admin", controller.Login_admin)
 	app.Post("/api/login_user", controller.Login_user)
 	app.Post("/api/chatbot", controller.MyHandler)
+	app.Post("/api/update_user", controller.UpdateUser)
+	app.Post("/api/delete_user", controller.DeleteUser)
+	app.Post("/api/get_users", controller.GetCompanyUsers)
 	app.Get("/api/user", controller.User)
 	app.Post("/api/logout", controller.Logout)
 	

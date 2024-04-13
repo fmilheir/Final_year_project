@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom'; // Import Link from react-rou
 import { Box, Button, Card, CardContent, Typography, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios';
+import '../css/nav.css';
 
 interface Ticket {
     id: number;

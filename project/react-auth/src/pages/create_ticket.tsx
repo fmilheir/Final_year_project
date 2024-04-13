@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 import { TextField, Button, Box, Container, Typography } from '@mui/material';
 import axios from 'axios';
+import '../css/nav.css';
 
 const CreateTicketForm = () => {
   const [ticketData, setTicketData] = useState({
