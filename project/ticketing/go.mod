@@ -27,10 +27,17 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/huandu/xstrings v1.4.0 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/pgx/v5 v5.4.3 // indirect
 	github.com/jessevdk/go-flags v1.5.0 // indirect
+	github.com/jinzhu/gorm v1.9.16 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/josharian/intern v1.0.0 // indirect
 	github.com/kr/pretty v0.3.1 // indirect
 	github.com/kr/text v0.2.0 // indirect
+	github.com/lib/pq v1.1.1 // indirect
 	github.com/magiconair/properties v1.8.7 // indirect
 	github.com/mailru/easyjson v0.7.7 // indirect
 	github.com/mitchellh/copystructure v1.2.0 // indirect
@@ -65,4 +72,6 @@ require (
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
+	gorm.io/driver/postgres v1.5.7 // indirect
+	gorm.io/gorm v1.25.9 // indirect
 )

@@ -13,22 +13,27 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+
+	"github.com/jinzhu/gorm"
+		 _ "github.com/jinzhu/gorm/dialects/postgres" 
+	
 )
 
 // Incident An Incident is a record of an event that has altered the operational state of a entity (Resource, Service or Customers Product). An incident represents an issue that needs to be diagnosed and resolved.
 //
 // swagger:model Incident
 type Incident struct {
+	gorm.Model
 
 	// When sub-classing, this defines the super-class
-	AtBaseType string `json:"@baseType,omitempty"`
+	AtBaseType string `json:"@baseType,omitempty" gorm:"size:255"` 
 
 	// A URI to a JSON-Schema file that defines additional attributes and relationships
 	// Format: uri
-	AtSchemaLocation strfmt.URI `json:"@schemaLocation,omitempty"`
+	AtSchemaLocation strfmt.URI `json:"@schemaLocation,omitempty" grom:"size:255"`
 
 	// When sub-classing, this defines the sub-class Extensible name
-	AtType string `json:"@type,omitempty"`
+	AtType string `json:"@type,omitempty" gorm:"size:255"`
 
 	// Provides the Acknowledgement State of the incident (unacknowledged | acknowledged).
 	AckState IncidentAckStateType `json:"ackState,omitempty"`
@@ -36,11 +41,11 @@ type Incident struct {
 	// The ackTime or acknowledgeTime of the incident. An acknowledged incident is being worked on, but is not yet resolved
 	// Example: 2022-03-10T04:01:12Z
 	// Format: date-time
-	AckTime strfmt.DateTime `json:"ackTime,omitempty"`
+	AckTime strfmt.DateTime `json:"ackTime,omitempty" gorm:"type:timestamp" `
 
 	// List of affected entities
 	// Example: e.g  a ref to a service or resource
-	AffectedEntity []*EntityRef `json:"affectedEntity"`
+	AffectedEntity []*EntityRef `json:"affectedEntity" gorm:"foreignKey:ID"`
 
 	// The category of the incident  (category is the term used by ITU)
 	// Example: BTS Software Fault
@@ -49,25 +54,25 @@ type Incident struct {
 	// The clear time of the incident
 	// Example: 2022-03-10T04:01:12Z
 	// Format: date-time
-	ClearTime strfmt.DateTime `json:"clearTime,omitempty"`
+	ClearTime strfmt.DateTime `json:"clearTime,omitempty" gorm:"size:255"`
 
 	// The domain of the incident, for example RAN, PON, OTN, Cross-Domain etc
-	Domain string `json:"domain,omitempty"`
+	Domain string `json:"domain,omitempty" gorm:"size:255"`
 
 	// The correlation event object such as alarm, externalAlarm, performance, etc.
-	EventID []*ResourceEntity `json:"eventId"`
+	EventID []*ResourceEntity `json:"eventId" gorm:"foreignKey:ID"`
 
 	// This is used for extend the incident with attributes
-	ExtensionInfo []*Characteristic `json:"extensionInfo"`
+	ExtensionInfo []*Characteristic `json:"extensionInfo" gorm:"foreignKey:ID"`
 
 	// An identification of an entity that is owned by or originates in a software system different from the current system, for example a ProductOrder handed off from a commerce platform into an order handling system. The structure identifies the system itself, the nature of the entity within the system (e.g. class name) and the unique ID of the entity within the system. It is anticipated that multiple external IDs can be held for a single entity, e.g. if the entity passed through multiple systems on the way to the current system. In this case the consumer is expected to sequence the IDs in the array in reverse order of provenance, i.e. most recent system first in the list.
-	ExternalIdentifier []*ExternalIdentifier `json:"externalIdentifier"`
+	ExternalIdentifier []*ExternalIdentifier `json:"externalIdentifier" gorm:"foreignKey:ID"`
 
 	// Hyperlink, a reference to the incident entity
-	Href string `json:"href,omitempty"`
+	Href string `json:"href,omitempty" gorm:"size:255"`
 
 	// unique identifier
-	ID string `json:"id,omitempty"`
+	ID string `json:"id,omitempty" gorm:"primary_key"`
 
 	// Impact which indicates the degree of impact on affected services or users. This field is optional. The options are extensive, significant, moderate, and minor
 	Impact ImpactType `json:"impact,omitempty"`
@@ -90,14 +95,14 @@ type Incident struct {
 	Priority PriorityType `json:"priority,omitempty"`
 
 	// A root cause is a fundamental or underlying reason behind why an incident occurred that identifies one or more failures. An incident many have multiple rootCauses
-	RootCause []*RootCause `json:"rootCause"`
+	RootCause []*RootCause `json:"rootCause" gorm:"foreignKey:ID"`
 
 	// The root event object such as alarm, externalAlarm, performance, etc.
-	RootEventID []*ResourceEntity `json:"rootEventId"`
+	RootEventID []*ResourceEntity `json:"rootEventId" gorm:"foreignKey:ID"`
 
 	// The objects show the incident, it may be part of Network Equipment. Fault object, which may be an NE or a port.
 	// Example: e.g. weak optical signals, the fault object is a PON port, the root cause is an optical splitter, and the affected object is an ONU
-	SourceObject []*ResourceEntity `json:"sourceObject"`
+	SourceObject []*ResourceEntity `json:"sourceObject " gorm:"foreignKey:AtSchemaLocation"`
 
 	// Incident state. The options are raised | updated | cleared. Cleared means Resolved)
 	State IncidentStateType `json:"state,omitempty"`

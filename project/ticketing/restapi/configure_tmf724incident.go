@@ -10,6 +10,8 @@ import (
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
 
+	"fmilheir/test_swagger/database"
+	"fmilheir/test_swagger/models"
 	"fmilheir/test_swagger/restapi/operations"
 	"fmilheir/test_swagger/restapi/operations/diagnose_incident"
 	"fmilheir/test_swagger/restapi/operations/events_subscription"
@@ -49,8 +51,38 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 	}
 	if api.IncidentCreateIncidentHandler == nil {
 		api.IncidentCreateIncidentHandler = incident.CreateIncidentHandlerFunc(func(params incident.CreateIncidentParams) middleware.Responder {
-			return middleware.NotImplemented("operation incident.CreateIncident has not yet been implemented")
+			name := params.Incident.Name
+			category := params.Incident.Category
+			priority := params.Incident.Priority
+			state := params.Incident.State
+			ackState := params.Incident.AckState
+			occurTime := params.Incident.OccurTime
+			domain := params.Incident.Domain
+			sourceObject := params.Incident.SourceObject
+			rootEventID := params.Incident.RootEventID
+
+
+			newIncident := &models.Incident{
+				Name:         *name,
+				Category:     *category,
+				Priority:     *priority,
+				State:        *state,
+				AckState:     *ackState,
+				OccurTime:    *occurTime,
+				Domain:       *domain,
+				SourceObject: sourceObject,
+				RootEventID:  rootEventID,
+			}
+
+			if err := database.DB.Db.Create(newIncident); err != nil {
+				// Handle the error
+				return incident.NewCreateIncidentInternalServerError().WithPayload(&models.Error{Code: 500, Message: "Failed to create incident"})
+			}
+	
+			// Return a success response
+			return incident.NewCreateIncidentCreated().WithPayload(newIncident)
 		})
+	
 	}
 	if api.ResolveIncidentCreateResolveIncidentHandler == nil {
 		api.ResolveIncidentCreateResolveIncidentHandler = resolve_incident.CreateResolveIncidentHandlerFunc(func(params resolve_incident.CreateResolveIncidentParams) middleware.Responder {
