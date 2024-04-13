@@ -9,6 +9,7 @@ ENV GO111MODULE=on
 # This step is needed if you decide to build Air from source or if your Go project has dependencies that need to be fetched via git.
 RUN apt-get update && apt-get install -y git
 
+
 # Set the working directory inside the container.
 WORKDIR /app
 
@@ -29,8 +30,10 @@ RUN go mod download
 COPY . .
 
 
+
+
 # Expose port 8080 to the outside world.
-EXPOSE 8080
+EXPOSE 3030
 
 # Command to run the executable with Air for live reloading.
 CMD ["air"]

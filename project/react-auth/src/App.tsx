@@ -64,7 +64,7 @@ const App: React.FC = () => {
     <div className="App">
       <Router>
         <header>
-          <Navigation isAuthenticated={isAuthenticated} firstName={firstName} />
+          <Navigation isAuthenticated={isAuthenticated} firstName={firstName} role={isAdmin}/>
         </header>
         <Routes>
         <Route path="/" element={<Navigate replace to="/home" />} />

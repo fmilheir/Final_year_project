@@ -8,6 +8,7 @@ import '../css/nav.css'; // Import custom CSS styles
 interface Props {
   isAuthenticated: boolean;
   firstName: string;
+  role: boolean;
 }
 
   const handleLogout = async () => {
@@ -29,7 +30,7 @@ interface Props {
   };
 
 
-const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
+const Navigation: React.FC<Props> = ({ isAuthenticated, role }) => {
   return (
     <header>
     <Navbar expand="lg" bg="light" variant="light">
@@ -43,8 +44,10 @@ const Navigation: React.FC<Props> = ({ isAuthenticated }) => {
             {isAuthenticated && (
               <>
                 <Nav.Link as={Link} to="/home" className="btn btn-primary me-2">Home</Nav.Link>
-                <Nav.Link as={Link} to="/my_stocks" className="btn btn-primary me-2">Predictions</Nav.Link>
-                <Nav.Link as={Link} to="/news" className="btn btn-primary me-2">News</Nav.Link>
+                <Nav.Link as={Link} to="/dashboard" className="btn btn-primary me-2">Dashboard</Nav.Link>
+                <Nav.Link as={Link} to="/chatbot" className="btn btn-primary me-2">chatbot</Nav.Link>
+                <Nav.Link as={Link} to="/create_ticket" className="btn btn-primary me-2">Create Ticket</Nav.Link>
+                <Nav.Link as={Link} to="/admin_panel" className="btn btn-primary me-2">Admin Panel</Nav.Link>
               </>
             )}
           </Nav>
