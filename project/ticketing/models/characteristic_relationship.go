@@ -12,12 +12,15 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+	"github.com/jinzhu/gorm"
+		 _ "github.com/jinzhu/gorm/dialects/postgres" 
 )
 
 // CharacteristicRelationship Another Characteristic that is related to the current Characteristic.
 //
 // swagger:model CharacteristicRelationship
 type CharacteristicRelationship struct {
+	gorm.Model
 
 	// When sub-classing, this defines the super-class
 	AtBaseType string `json:"@baseType,omitempty"`
@@ -34,7 +37,7 @@ type CharacteristicRelationship struct {
 	Href strfmt.URI `json:"href,omitempty"`
 
 	// Unique identifier of the characteristic
-	ID string `json:"id,omitempty"`
+	ID string `json:"id,omitempty" gorm:"primaryKey"`
 
 	// The type of relationship
 	RelationshipType string `json:"relationshipType,omitempty"`

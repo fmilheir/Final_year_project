@@ -12,19 +12,24 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+
+	//gorm
+	"github.com/jinzhu/gorm"
+		 _ "github.com/jinzhu/gorm/dialects/postgres" 
 )
 
 // ResourceEntity Base schema for REST Resources
 //
 // swagger:model ResourceEntity
 type ResourceEntity struct {
+	gorm.Model
 
 	// When sub-classing, this defines the super-class
 	AtBaseType string `json:"@baseType,omitempty"`
 
 	// A URI to a JSON-Schema file that defines additional attributes and relationships
 	// Format: uri
-	AtSchemaLocation strfmt.URI `json:"@schemaLocation,omitempty"`
+	AtSchemaLocation strfmt.URI `json:"@schemaLocation,omitempty" `
 
 	// When sub-classing, this defines the sub-class Extensible name
 	AtType string `json:"@type,omitempty"`
@@ -35,7 +40,7 @@ type ResourceEntity struct {
 
 	// ID created by the implementing service
 	// Example: aac9969d-219d-4ff1-b256-1765dcf9b342
-	ID string `json:"id,omitempty"`
+	ID string `json:"id,omitempty" gorm:"primaryKey"`
 }
 
 // Validate validates this resource entity

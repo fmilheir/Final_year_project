@@ -13,12 +13,15 @@ import (
 	"github.com/go-openapi/strfmt"
 	"github.com/go-openapi/swag"
 	"github.com/go-openapi/validate"
+	"github.com/jinzhu/gorm"
+		 _ "github.com/jinzhu/gorm/dialects/postgres" 
 )
 
 // Characteristic Describes a given characteristic of an object or entity through a name/value pair.
 //
 // swagger:model Characteristic
 type Characteristic struct {
+	gorm.Model
 
 	// When sub-classing, this defines the super-class
 	AtBaseType string `json:"@baseType,omitempty"`
@@ -31,7 +34,7 @@ type Characteristic struct {
 	AtType string `json:"@type,omitempty"`
 
 	// characteristic relationship
-	CharacteristicRelationship []*CharacteristicRelationship `json:"characteristicRelationship"`
+	CharacteristicRelationship []*CharacteristicRelationship `json:"characteristicRelationship" gorm:"foreignKey:ID"`
 
 	// Unique identifier of the characteristic
 	ID string `json:"id,omitempty"`
@@ -42,7 +45,7 @@ type Characteristic struct {
 
 	// The value of the characteristic
 	// Required: true
-	Value Any `json:"value"`
+	Value Any `json:"value" gorm:"type:jsonb"`
 
 	// Data type of the value of the characteristic
 	ValueType string `json:"valueType,omitempty"`

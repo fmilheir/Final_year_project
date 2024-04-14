@@ -72,7 +72,7 @@ type Incident struct {
 	Href string `json:"href,omitempty" gorm:"size:255"`
 
 	// unique identifier
-	ID string `json:"id,omitempty" gorm:"primary_key"`
+	ID string `json:"id,omitempty" `
 
 	// Impact which indicates the degree of impact on affected services or users. This field is optional. The options are extensive, significant, moderate, and minor
 	Impact ImpactType `json:"impact,omitempty"`
@@ -102,7 +102,7 @@ type Incident struct {
 
 	// The objects show the incident, it may be part of Network Equipment. Fault object, which may be an NE or a port.
 	// Example: e.g. weak optical signals, the fault object is a PON port, the root cause is an optical splitter, and the affected object is an ONU
-	SourceObject []*ResourceEntity `json:"sourceObject " gorm:"foreignKey:AtSchemaLocation"`
+	SourceObject []*ResourceEntity `json:"sourceObject" gorm:"foreignKey:ID"`
 
 	// Incident state. The options are raised | updated | cleared. Cleared means Resolved)
 	State IncidentStateType `json:"state,omitempty"`

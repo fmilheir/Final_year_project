@@ -29,8 +29,8 @@ RUN go install github.com/cosmtrek/air@v1.27.3
 # Copy the source from the current directory to the Working Directory inside the container.
 COPY . .
 
-COPY cmd/tmf724incident-server/cert.pem /etc/ssl/certs/tmf724incident/cert.pem
-COPY cmd/tmf724incident-server/key.pem /etc/ssl/private/tmf724incident/key.pem
+COPY cmd/tmf724incident-server/cert.pem /etc/ssl/certs/cert.pem
+COPY cmd/tmf724incident-server/key.pem /etc/ssl/private/key.pem
 # Set the working directory to the server directory where main.go is located.
 WORKDIR /app/cmd/tmf724incident-server
 

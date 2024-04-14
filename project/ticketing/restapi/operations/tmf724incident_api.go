@@ -51,9 +51,7 @@ func NewTmf724incidentAPI(spec *loads.Document) *Tmf724incidentAPI {
 		DiagnoseIncidentCreateDiagnoseIncidentHandler: diagnose_incident.CreateDiagnoseIncidentHandlerFunc(func(params diagnose_incident.CreateDiagnoseIncidentParams) middleware.Responder {
 			return middleware.NotImplemented("operation diagnose_incident.CreateDiagnoseIncident has not yet been implemented")
 		}),
-		IncidentCreateIncidentHandler: incident.CreateIncidentHandlerFunc(func(params incident.CreateIncidentParams) middleware.Responder {
-			return middleware.NotImplemented("operation incident.CreateIncident has not yet been implemented")
-		}),
+	
 		ResolveIncidentCreateResolveIncidentHandler: resolve_incident.CreateResolveIncidentHandlerFunc(func(params resolve_incident.CreateResolveIncidentParams) middleware.Responder {
 			return middleware.NotImplemented("operation resolve_incident.CreateResolveIncident has not yet been implemented")
 		}),

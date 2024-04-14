@@ -5,19 +5,22 @@ package restapi
 import (
 	"crypto/tls"
 	"net/http"
+	"time"
+	"fmt"
 
 	"github.com/go-openapi/errors"
 	"github.com/go-openapi/runtime"
 	"github.com/go-openapi/runtime/middleware"
+	"github.com/go-openapi/strfmt"
 
-	"fmilheir/test_swagger/database"
-	"fmilheir/test_swagger/models"
 	"fmilheir/test_swagger/restapi/operations"
 	"fmilheir/test_swagger/restapi/operations/diagnose_incident"
 	"fmilheir/test_swagger/restapi/operations/events_subscription"
 	"fmilheir/test_swagger/restapi/operations/incident"
 	"fmilheir/test_swagger/restapi/operations/notification_listeners_client_side"
 	"fmilheir/test_swagger/restapi/operations/resolve_incident"
+	"fmilheir/test_swagger/models"
+	"fmilheir/test_swagger/database"
 )
 
 //go:generate swagger generate server --target ..\..\test_swaggeer --name Tmf724incident --spec ..\Documents\TMF724-Incident-v4.0.1.swagger.json --principal interface{}
@@ -51,16 +54,39 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 	}
 	if api.IncidentCreateIncidentHandler == nil {
 		api.IncidentCreateIncidentHandler = incident.CreateIncidentHandlerFunc(func(params incident.CreateIncidentParams) middleware.Responder {
+			rootEventIDs := make([]*models.ResourceEntity, len(params.Incident.RootEventID))
+			for i, v := range params.Incident.RootEventID {
+				rootEventIDs[i] = v
+			}
+
+			fmt.Println(len(rootEventIDs))
+			
+			fmt.Println("Start CreateIncidentHandlerFunc")
+			fmt.Println(*params.Incident)
+			fmt.Println(*params.Incident.Name)
+			fmt.Println(*params.Incident.Category)
+			fmt.Println(*params.Incident.Priority)
+			fmt.Println(*params.Incident.State)
+			fmt.Println(*params.Incident.AckState)
+			//fmt.Println(*sourceObjects[0])
+			//fmt.Println(*sourceObjects[1])
+			fmt.Println(rootEventIDs)
+			fmt.Println(*rootEventIDs[0])
+			fmt.Println(params.Incident.SourceObject)
+			fmt.Println("My values are: ",*params.Incident.SourceObject[0])
+
+			
+			//fmt.Println(*params.Incident.SourceObject)
+
+			
 			name := params.Incident.Name
 			category := params.Incident.Category
 			priority := params.Incident.Priority
 			state := params.Incident.State
 			ackState := params.Incident.AckState
-			occurTime := params.Incident.OccurTime
-			domain := params.Incident.Domain
+			occurTime := strfmt.DateTime(time.Now())
+			domain := "IT"
 			sourceObject := params.Incident.SourceObject
-			rootEventID := params.Incident.RootEventID
-
 
 			newIncident := &models.Incident{
 				Name:         *name,
@@ -68,21 +94,21 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 				Priority:     *priority,
 				State:        *state,
 				AckState:     *ackState,
-				OccurTime:    *occurTime,
-				Domain:       *domain,
+				OccurTime:    occurTime,
+				Domain:       domain,
+				RootEventID:  rootEventIDs,
 				SourceObject: sourceObject,
-				RootEventID:  rootEventID,
 			}
+			fmt.Println("New Incident: ", newIncident)
 
 			if err := database.DB.Db.Create(newIncident); err != nil {
-				// Handle the error
-				return incident.NewCreateIncidentInternalServerError().WithPayload(&models.Error{Code: 500, Message: "Failed to create incident"})
+				// Log or print the error message
+				fmt.Println("Error creating incident:", err)
+				return incident.NewCreateIncidentInternalServerError().WithPayload(&models.Error{Message: "Failed to create incident"})
 			}
-	
-			// Return a success response
+
 			return incident.NewCreateIncidentCreated().WithPayload(newIncident)
 		})
-	
 	}
 	if api.ResolveIncidentCreateResolveIncidentHandler == nil {
 		api.ResolveIncidentCreateResolveIncidentHandler = resolve_incident.CreateResolveIncidentHandlerFunc(func(params resolve_incident.CreateResolveIncidentParams) middleware.Responder {
