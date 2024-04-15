@@ -122,7 +122,15 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 	}
 	if api.IncidentListIncidentHandler == nil {
 		api.IncidentListIncidentHandler = incident.ListIncidentHandlerFunc(func(params incident.ListIncidentParams) middleware.Responder {
-			return middleware.NotImplemented("operation incident.ListIncident has not yet been implemented")
+			var incidents []*models.Incident
+			
+			// Get all incidents from the database
+			if err := database.DB.Db.Find(&incidents).Error; err != nil {
+				fmt.Println("Error getting incidents:", err)
+				return incident.NewListIncidentInternalServerError().WithPayload(&models.Error{Message: "Failed to get incidents"})
+			}
+
+			return incident.NewListIncidentOK().WithPayload(incidents)
 		})
 	}
 	if api.ResolveIncidentListResolveIncidentHandler == nil {
