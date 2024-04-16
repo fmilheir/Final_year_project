@@ -40,7 +40,7 @@ const AdminPanel: React.FC<Props> = ({ userID }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userID }),
+        body: JSON.stringify({ userID:userID.toString() }),
       });
       const data = await response.json();
       setCompanyId(data.companyID);
@@ -102,7 +102,6 @@ const updateUser = async (e: SyntheticEvent) => {
     }
 };
 
-
   // Function to handle form submission for creating a new user
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -163,6 +162,10 @@ const updateUser = async (e: SyntheticEvent) => {
 
 return (
 <main className="admin-panel-container">
+      <div className="admin-panel-container container my-5">
+      <h1 className="page-header">
+      <i className="fas fa-user"></i>
+        Admin Panel</h1>
       <section>
         <h2 className="section-header">Existing Users</h2>
         <Table>
@@ -198,6 +201,8 @@ return (
           </TableBody>
         </Table>
       </section>
+
+
       <section>
         <h2 className="section-header">Create New User</h2>
         <form onSubmit={handleSubmit}>
@@ -256,6 +261,7 @@ return (
           <button type="submit" className="btn btn-primary">Create User</button>
         </form>
       </section>
+      </div>
     </main>
   );
 };
