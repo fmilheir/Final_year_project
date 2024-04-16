@@ -6,10 +6,11 @@ import axios from 'axios';
 import '../css/nav.css';
 
 interface Ticket {
-    id: number;
-    title: string;
+    ID: number;
+    name: string;
     priority: string;
-    description: string;
+    IncidentDetail: string;
+    state: string;
 }
 
 const Dashboard = () => {
@@ -20,8 +21,22 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const response = await axios.get('http://localhost:8080/api/tickets');
-                setTickets(response.data);
+                const response = await fetch('https://localhost:3030/tmf-api/Incident/v4/incident',
+                    {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        //agent: new (require('https').Agent)({ rejectUnauthorized: false })
+
+                    } // Add agent to ignore self-signed certificate
+                );
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tickets');
+                }
+                const data = await response.json();
+                console.log('Tickets:', data);
+                setTickets(data);
             } catch (error) {
                 console.error('Error fetching tickets:', error);
             } finally {
@@ -56,21 +71,21 @@ const Dashboard = () => {
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
                     {tickets.length ? (
                         tickets.map((ticket) => (
-                            <Card key={ticket.id} sx={{ minWidth: 275 }}>
+                            <Card key={ticket.ID} sx={{ minWidth: 275 }}>
                                 <CardContent>
                                     <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Ticket ID: {ticket.id}
+                                        Ticket ID: {ticket.ID}
                                     </Typography>
                                     <Typography variant="h5" component="div">
-                                        {ticket.title}
+                                        {ticket.name}
                                     </Typography>
                                     <Typography sx={{ mb: 1.5 }} color="text.secondary">
                                         Priority: {ticket.priority}
                                     </Typography>
                                     <Typography variant="body2">
-                                        {ticket.description}
+                                        {ticket.IncidentDetail}
                                     </Typography>
-                                    <Link to={`/edit_ticket/${ticket.id}`} style={{ textDecoration: 'none' }}>
+                                    <Link to={`/edit_ticket/${ticket.ID}`} style={{ textDecoration: 'none' }}>
                                         <Button variant="outlined" color="primary" size="small" sx={{ mt: 2 }}>
                                             Edit
                                         </Button>

@@ -42,6 +42,9 @@ type IncidentRef struct {
 
 	// Name of the related incident
 	Name string `json:"name,omitempty"`
+
+	// resolution (edited by me in order to be able to get the resolution from the incident)
+	IncidentResolutionSuggestion string `json:"resolution,omitempty"`
 }
 
 // Validate validates this incident ref

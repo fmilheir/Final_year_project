@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
-import { TextField, Button, Box, Container, Typography } from '@mui/material';
+import { TextField, Button, Box, Container, Typography, Select, MenuItem, SelectChangeEvent} from '@mui/material';
 import axios from 'axios';
 import '../css/nav.css';
 
@@ -8,13 +8,25 @@ const CreateTicketForm = () => {
     name: '',
     category: '',
     priority: '',
-    severity: '',
-    domain: '',
-    sourceObject: '',
-    rootEventId: '',
+    domain: 'RAN',
+    IncidentDetail: '',
+    sourceObject: [{
+      id: '12345678',
+      href: '/resourceInventoryManagement/v4/resource/12345678'
+    }],
+    rootEventId: [{
+      id: '30086529',
+      '@type': 'Alarm',
+      href: 'exemple/'
+    }]
   });
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    const { name, value } = event.target;
+    setTicketData({ ...ticketData, [name as string]: value });
+  };
+
+  const handleChangeDropdown = (event: SelectChangeEvent<string>) => {
     const { name, value } = event.target;
     setTicketData({ ...ticketData, [name]: value });
   };
@@ -22,7 +34,7 @@ const CreateTicketForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:8080/tmf-api/Incident/v4/incident', ticketData);
+      await axios.post('https://localhost:3030/tmf-api/Incident/v4/incident', ticketData);
       console.log('Ticket created successfully!');
       resetForm(); // Reset form after successful submission
     } catch (error) {
@@ -35,12 +47,21 @@ const CreateTicketForm = () => {
       name: '',
       category: '',
       priority: '',
-      severity: '',
       domain: '',
-      sourceObject: '',
-      rootEventId: '',
+      IncidentDetail: '',
+      sourceObject: [{
+        id: '',
+        href: ''
+      }],
+      rootEventId: [{
+        id: '',
+        '@type': '',
+        href: ''
+      }]
     });
   };
+
+
 
   return (
     <Container maxWidth="md">
@@ -54,11 +75,19 @@ const CreateTicketForm = () => {
         </Typography>
         <TextField label="Name" name="name" value={ticketData.name} onChange={handleChange} fullWidth margin="normal" />
         <TextField label="Category" name="category" value={ticketData.category} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Priority" name="priority" value={ticketData.priority} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Severity" name="severity" value={ticketData.severity} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Domain" name="domain" value={ticketData.domain} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Source Object" name="sourceObject" value={ticketData.sourceObject} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Root Event ID" name="rootEventId" value={ticketData.rootEventId} onChange={handleChange} fullWidth margin="normal" />
+        <Select
+          label="Priority"
+          name="priority"
+          value={ticketData.priority}
+          onChange={handleChangeDropdown}
+          fullWidth
+          margin="dense"
+        >
+          <MenuItem value="low">Low</MenuItem>
+          <MenuItem value="medium">Medium</MenuItem>
+          <MenuItem value="high">High</MenuItem>
+        </Select>
+        <TextField label="IncidentDetail" name="IncidentDetail" value={ticketData.IncidentDetail} onChange={handleChange} fullWidth margin="normal" />
         <Button variant="contained" color="primary" type="submit" fullWidth sx={{ marginTop: 2 }}>
           Create Ticket
         </Button>

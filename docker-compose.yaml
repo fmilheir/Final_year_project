@@ -2,19 +2,19 @@ version: '3.8'
 
 services:
 
-  #backend:
-  #  build:
-  #    context: ./project/backend
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - '8080:8080'
-  #  environment:
-  #    - GIN_MODE=debug
-  #  env_file:
-  #    - ./project/backend/.env
-  #  volumes:
-  #    - ./project/backend:/app
-  #    - ./project/backend/node_modules:/app/node_modules
+  backend:
+    build:
+      context: ./project/backend
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    environment:
+      - GIN_MODE=debug
+    env_file:
+      - ./project/backend/.env
+    volumes:
+      - ./project/backend:/app
+      - ./project/backend/node_modules:/app/node_modules
 
   db:
       image: postgres:alpine
@@ -27,19 +27,19 @@ services:
       volumes:
         - postgres-data:/var/lib/postgresql/data
 
-  #frontend:
-  #  build:
-  #    context: ./project/react-auth
-  #    dockerfile: Dockerfile
-  #  ports:
-  #    - '3000:80'
-  #  volumes:
-  #    - ./project/react-auth/src:/etc/src
-  #    - ./project/react-auth/public:/app/public
-  #  depends_on:
-  #    - backend
-  #  environment:
-  #    - NODE_ENV=development
+  frontend:
+    build:
+      context: ./project/react-auth
+      dockerfile: Dockerfile
+    ports:
+      - '3000:80'
+    volumes:
+      - ./project/react-auth/src:/etc/src
+      - ./project/react-auth/public:/app/public
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=development
 
   #chatbot:
     #build:
@@ -56,6 +56,7 @@ services:
     #env_file:
     #  - ./project/chatbot/.env
     #command: ["sh", "-c", "crontab /app/crontab.txt && cron -f"]
+    
   ticketing:
     build:
       context: ./project/ticketing

@@ -51,10 +51,6 @@ func NewTmf724incidentAPI(spec *loads.Document) *Tmf724incidentAPI {
 		DiagnoseIncidentCreateDiagnoseIncidentHandler: diagnose_incident.CreateDiagnoseIncidentHandlerFunc(func(params diagnose_incident.CreateDiagnoseIncidentParams) middleware.Responder {
 			return middleware.NotImplemented("operation diagnose_incident.CreateDiagnoseIncident has not yet been implemented")
 		}),
-	
-		ResolveIncidentCreateResolveIncidentHandler: resolve_incident.CreateResolveIncidentHandlerFunc(func(params resolve_incident.CreateResolveIncidentParams) middleware.Responder {
-			return middleware.NotImplemented("operation resolve_incident.CreateResolveIncident has not yet been implemented")
-		}),
 		DiagnoseIncidentListDiagnoseIncidentHandler: diagnose_incident.ListDiagnoseIncidentHandlerFunc(func(params diagnose_incident.ListDiagnoseIncidentParams) middleware.Responder {
 			return middleware.NotImplemented("operation diagnose_incident.ListDiagnoseIncident has not yet been implemented")
 		}),
@@ -405,6 +401,12 @@ func (o *Tmf724incidentAPI) initHandlerCache() {
 	if o.handlers["POST"] == nil {
 		o.handlers["POST"] = make(map[string]http.Handler)
 	}
+	// created mehtod to resolve incident, not in the original code
+	o.handlers["POST"]["/resolveIncident"] = resolve_incident.NewCreateResolveIncident(o.context, o.ResolveIncidentCreateResolveIncidentHandler)
+	if o.handlers["GET"] == nil {
+		o.handlers["GET"] = make(map[string]http.Handler)
+	}
+
 	o.handlers["POST"]["/resolveIncident"] = resolve_incident.NewCreateResolveIncident(o.context, o.ResolveIncidentCreateResolveIncidentHandler)
 	if o.handlers["GET"] == nil {
 		o.handlers["GET"] = make(map[string]http.Handler)

@@ -87,6 +87,7 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 			occurTime := strfmt.DateTime(time.Now())
 			domain := "IT"
 			sourceObject := params.Incident.SourceObject
+			detail := params.Incident.IncidentDetail
 
 			newIncident := &models.Incident{
 				Name:         *name,
@@ -98,6 +99,7 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 				Domain:       domain,
 				RootEventID:  rootEventIDs,
 				SourceObject: sourceObject,
+				IncidentDetail: detail,
 			}
 			fmt.Println("New Incident: ", newIncident)
 
@@ -112,7 +114,24 @@ func configureAPI(api *operations.Tmf724incidentAPI) http.Handler {
 	}
 	if api.ResolveIncidentCreateResolveIncidentHandler == nil {
 		api.ResolveIncidentCreateResolveIncidentHandler = resolve_incident.CreateResolveIncidentHandlerFunc(func(params resolve_incident.CreateResolveIncidentParams) middleware.Responder {
-			return middleware.NotImplemented("operation resolve_incident.CreateResolveIncident has not yet been implemented")
+			if params.ResolveIncident.Incident == nil || params.ResolveIncident.Incident.ID == nil || params.ResolveIncident.Incident.IncidentResolutionSuggestion == ""{
+				return resolve_incident.NewCreateResolveIncidentBadRequest().WithPayload(&models.Error{Message: "Incident is required"})
+			}
+			
+			ID:= *params.ResolveIncident.Incident.ID
+			IncidentResolutionSuggestion := params.ResolveIncident.Incident.IncidentResolutionSuggestion
+
+			fmt.Println("Start CreateResolveIncidentHandlerFunc")
+			//update incident whre id = ID changing the state to RESOLVED and adding the IncidentResolutionSuggestion
+			if database.DB.Db.Model(&models.Incident{}).Where("id = ?", ID).Update("state", "RESOLVED").Error != nil {
+				return resolve_incident.NewCreateResolveIncidentInternalServerError().WithPayload(&models.Error{Message: "Failed to update incident"})
+			}
+			
+			if database.DB.Db.Model(&models.Incident{}).Where("id = ?", ID).Update("IncidentResolutionSuggestion", IncidentResolutionSuggestion).Error != nil {
+				return resolve_incident.NewCreateResolveIncidentInternalServerError().WithPayload(&models.Error{Message: "Failed to update incident with resolution"})
+			}
+
+			return resolve_incident.NewCreateResolveIncidentCreated().WithPayload(&models.ResolveIncident{ID: ID})
 		})
 	}
 	if api.DiagnoseIncidentListDiagnoseIncidentHandler == nil {

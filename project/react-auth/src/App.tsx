@@ -75,7 +75,7 @@ const App: React.FC = () => {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/chatbot" element={<Chatbot />} />
           <Route path="/create_ticket" element={<CreateTicketForm />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile userID={userID} />} />
           <Route path="/admin_panel" element={<AdminPanel userID={userID} />} />
           {/* Redirect unauthorized users trying to access protected routes */}
           {!isAuthenticated && (

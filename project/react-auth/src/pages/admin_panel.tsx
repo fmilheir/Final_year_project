@@ -6,7 +6,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 import '../css/admin_panel.css';
 
 
@@ -66,6 +66,42 @@ const AdminPanel: React.FC<Props> = ({ userID }) => {
       console.error('Error fetching users:', error);
     }
   };
+
+
+   //method for delleting user calling a post request to localhost 8080
+   const deleteUser = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+        await fetch('http://localhost:8080/api/delete', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ID: userID }),
+
+    });
+    console.log('User deleted successfully!');
+    } catch (error) {
+
+        console.error('Error deleting user:', error);
+    }
+};
+
+//method for upading user details calling a post request to localhost 8080
+const updateUser = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    try {
+        await fetch('http://localhost:8080/api/update', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ID: userID }),
+
+    });
+    console.log('User updated successfully!');
+    } catch (error) {
+
+        console.error('Error updating user:', error);
+    }
+};
+
 
   // Function to handle form submission for creating a new user
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
