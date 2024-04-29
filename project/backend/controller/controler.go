@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"strings"
 	"io"
+	"crypto/tls"	
 
 
 	"github.com/dgrijalva/jwt-go"
@@ -462,39 +463,54 @@ func MyHandler(c *fiber.Ctx) error {
 
 //ticekting system calling api in localhost 5000
 func CreateTicket(c *fiber.Ctx) error {
-	requestBody, err := ioutil.ReadAll(c.Request().Body())
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).SendString(err.Error())
-    }
+  // Read the request body
+  requestBody := c.Request().Body()
 
-    // Pass incident information to the API in another container
-    response, err := PassIncidentInfoToAPI(requestBody)
-    if err != nil {
-        return c.Status(http.StatusInternalServerError).SendString(err.Error())
-    }
+  // Pass incident information to the API in another container
+  response, err := PassIncidentInfoToAPI(requestBody)
+  if err != nil {
+	  return c.Status(http.StatusInternalServerError).SendString(err.Error())
+  }
 
-    // Respond with the response from the API
-    return c.SendString(response)
+  // Respond with the response from the API
+  return c.SendString(response)
 }
 
 func PassIncidentInfoToAPI(data []byte) (string, error) {
-	// Make a POST request to the API in another container
-    resp, err := http.Post("https://other-container:3030/tmf-api/Incident/v4/incident", "application/json", bytes.NewReader(data))
+
+	tlsConfig := &tls.Config{
+        InsecureSkipVerify: true,
+    }
+    transport := &http.Transport{
+        TLSClientConfig: tlsConfig,
+    }
+    client := &http.Client{
+        Transport: transport,
+    }
+
+	reader := bytes.NewReader(data)
+	fmt.Println(reader)
+	// Make a POST request to the API in another container:
+ 	resp, err := client.Post("https://ticketing:3030/tmf-api/Incident/v4/incident", "application/json", reader)
     if err != nil {
+		fmt.Println(err)
         return "", err
     }
     defer resp.Body.Close()
+	fmt.Println("passed 1")
 
     // Read the response body
     responseBody := new(bytes.Buffer)
     _, err = io.Copy(responseBody, resp.Body)
     if err != nil {
+		fmt.Println(err)
         return "", err
     }
+	fmt.Println("passed", resp.StatusCode)
 
     // Check if the request was successful (HTTP status code 200)
     if resp.StatusCode != http.StatusOK {
-        return "", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
+        return "woaahhh", fmt.Errorf("unexpected status code: %d", resp.StatusCode)
     }
 
     return responseBody.String(), nil

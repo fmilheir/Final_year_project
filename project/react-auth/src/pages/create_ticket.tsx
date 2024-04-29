@@ -34,7 +34,7 @@ const CreateTicketForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await axios.post('https://localhost:3030/tmf-api/Incident/v4/incident', ticketData);
+      await axios.post('http://localhost:8080/api/create_ticket', ticketData);
       console.log('Ticket created successfully!');
       resetForm(); // Reset form after successful submission
     } catch (error) {
