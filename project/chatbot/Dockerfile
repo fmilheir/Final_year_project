@@ -18,6 +18,13 @@ COPY Code/ /usr/src/app/Code
 
 COPY Pdf/ /usr/src/app/Pdf
 
+# Copy cronjob file to the container
+COPY crontab.txt /usr/src/app/
+
+# Copy the rebuild_chatbot_container.sh script to the container
+COPY rebuild_chatbot_container.sh /usr/src/app/
+
+
 # Set execute permission to the script
 RUN chmod +x /usr/src/app/rebuild_chatbot_container.sh
 

@@ -41,21 +41,21 @@ services:
     environment:
       - NODE_ENV=development
 
-  #chatbot:
-    #build:
-    #  context: ./project/chatbot
-    #  dockerfile: Dockerfile
-    #ports:
-    #  - '5000:5000'
-    #volumes:
-    #  - ./project/chatbot:/app
-    #depends_on:
-    #  - backend
-    #environment:
-    #  - GIN_MODE=debug
-    #env_file:
-    #  - ./project/chatbot/.env
-    #command: ["sh", "-c", "crontab /app/crontab.txt && cron -f"]
+  chatbot:
+    build:
+      context: ./project/chatbot
+      dockerfile: Dockerfile
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./project/chatbot:/app
+    depends_on:
+      - backend
+    environment:
+      - GIN_MODE=debug
+    env_file:
+      - ./project/chatbot/.env
+    command: ["sh", "-c", "crontab /usr/src/app/crontab.txt && cron -f"]
     
   ticketing:
     build:

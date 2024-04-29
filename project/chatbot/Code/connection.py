@@ -12,10 +12,6 @@ def retrieve_data():
         "password": os.getenv("DB_PASSWORD"),
         "port": "5432"
     }
-    print("my dbname is" ,os.getenv("DB_NAME") ,file=sys.stderr)
-    print("my dbuser is" ,os.getenv("DB_USER") ,file=sys.stderr)
-    print("my dbpassword is" ,os.getenv("DB_PASSWORD") ,file=sys.stderr)
-
     # Connect to the PostgreSQL database
     try:
         conn = psycopg2.connect(**conn_params)
@@ -25,9 +21,9 @@ def retrieve_data():
         print(e)
         return None
 
-    # Retrieve data from the database
+    # Retrieve data from the database for the chatbot retriving incident description and resolution
     try:
-        cursor.execute("SELECT * FROM incidents;")
+        cursor.execute("SELECT IncidentDetail, IncidentResolutionSuggestion FROM incidents;")
         data = cursor.fetchall()
     except psycopg2.Error as e:
         print("Error: Unable to execute query.")
@@ -43,7 +39,7 @@ def retrieve_data():
 
 def save_to_txt(data):
     # Check if the PDF directory exists, create it if it doesn't
-    pdf_dir = "pdf"
+    pdf_dir = "../Pdf"
     if not os.path.exists(pdf_dir):
         os.makedirs(pdf_dir)
 

@@ -17,5 +17,6 @@ func Setup(app *fiber.App) {
 	app.Post("/api/get_users", controller.GetCompanyUsers)
 	app.Get("/api/user", controller.User)
 	app.Post("/api/logout", controller.Logout)
+	app.Post("/api/create_ticket", controller.CreateTicket)
 	
 }
