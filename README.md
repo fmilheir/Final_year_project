@@ -5,7 +5,7 @@ This project presents an intelligent chatbot system designed to streamline ticke
 ## 📋 Table of Contents
 1. [Requirements](#requirements)
 2. [Installation](#installation)
-3. [Usage](#-usage)
+3. [Usage](#usage)
 4. [Project Structure](#project-structure)
 5. [Contributions](#contributions)
 
@@ -65,8 +65,9 @@ To interact with the chatbot system, follow these steps:
 
 5. Type your queries or requests related to ticketing processes, and the chatbot will provide intelligent and relevant responses. ✨
 
+
+## 📂 Project Structure <a name="project-structure"></a>
 ```bash
-📂 Project Structure
 The project structure is organized as follows:
 Copy codeintelligent-chatbot-system/
 ├── backend/
