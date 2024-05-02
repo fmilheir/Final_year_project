@@ -29,13 +29,15 @@ cd Final_year_project
 
 Download the required models:
 
-Mistral-7b-OpenOrca model:
+1. [Mistral-7b-OpenOrca model](https://gpt4all.io/index.html)
+
 
 Visit the GPT4All website and choose the OpenOrca option.
 Download the model file and rename it to mistral-7b-openorca.gguf2.Q4_0.gguf.
 
 
-LLaMA 2 model:
+2 . [LLaMA 2 model](https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/tree/mainhttps://huggingface.co/TheBloke/Llama-2-7B-Chat-GGUF/tree/main)
+
 
 Visit the LLaMA 2 model repository on Hugging Face.
 Download the model file and rename it to llama-2-7b.Q4_0.gguf.
