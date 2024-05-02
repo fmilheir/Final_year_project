@@ -23,7 +23,7 @@ def retrieve_data():
 
     # Retrieve data from the database for the chatbot retriving incident description and resolution
     try:
-        cursor.execute("SELECT IncidentDetail, IncidentResolutionSuggestion FROM incidents;")
+        cursor.execute("SELECT incident_detail, incident_resolution_suggestion FROM incidents;")
         data = cursor.fetchall()
     except psycopg2.Error as e:
         print("Error: Unable to execute query.")

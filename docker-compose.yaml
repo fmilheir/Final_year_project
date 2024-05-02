@@ -55,7 +55,6 @@ services:
       - GIN_MODE=debug
     env_file:
       - ./project/chatbot/.env
-    command: ["sh", "-c", "crontab /usr/src/app/crontab.txt && cron -f"]
     
   ticketing:
     build:

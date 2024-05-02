@@ -64,29 +64,49 @@ const App: React.FC = () => {
     <div className="App">
       <Router>
         <header>
-          <Navigation isAuthenticated={isAuthenticated} firstName={firstName} role={isAdmin}/>
+          <Navigation isAuthenticated={isAuthenticated} firstName={firstName} role={isAdmin} />
         </header>
         <Routes>
-        <Route path="/" element={<Navigate replace to="/home" />} />
-          <Route path="/home" element={<Home />} />
-          <Route path="/login_admin" element={<LoginAdmin />} />
-          <Route path="/login_user" element={<LoginUser />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/chatbot" element={<Chatbot />} />
-          <Route path="/create_ticket" element={<CreateTicketForm />} />
-          <Route path="/profile" element={<Profile userID={userID} />} />
-          <Route path="/admin_panel" element={<AdminPanel userID={userID} />} />
-          {/* Redirect unauthorized users trying to access protected routes */}
-          {!isAuthenticated && (
-            <>
-              <Route path="*" element={<Navigate replace to="/home" />} />
-            </>
-          )}
+          <Route path="/" element={<Navigate replace to="/home" />} />
+          <Route
+            path="/home"
+            element={isAuthenticated ? <Navigate replace to="/dashboard" /> : <Home />}
+          />
+          <Route
+            path="/login_admin"
+            element={isAuthenticated ? <Navigate replace to="/dashboard" /> : <LoginAdmin />}
+          />
+          <Route
+            path="/login_user"
+            element={isAuthenticated ? <Navigate replace to="/dashboard" /> : <LoginUser />}
+          />
+          <Route
+            path="/signup"
+            element={isAuthenticated ? <Navigate replace to="/dashboard" /> : <Signup />}
+          />
+          <Route
+            path="/dashboard"
+            element={isAuthenticated ? <Dashboard /> : <Navigate replace to="/home" />}
+          />
+          <Route
+            path="/chatbot"
+            element={isAuthenticated ? <Chatbot /> : <Navigate replace to="/home" />}
+          />
+          <Route
+            path="/create_ticket"
+            element={isAuthenticated ? <CreateTicketForm /> : <Navigate replace to="/home" />}
+          />
+          <Route
+            path="/profile"
+            element={isAuthenticated ? <Profile userID={userID} /> : <Navigate replace to="/home" />}
+          />
+          <Route
+            path="/admin_panel"
+            element={isAuthenticated && isAdmin ? <AdminPanel userID={userID} /> : <Navigate replace to="/home" />}
+          />
         </Routes>
       </Router>
     </div>
   );
 };
-
 export default App;
