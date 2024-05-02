@@ -3,18 +3,18 @@
 This project presents an intelligent chatbot system designed to streamline ticketing processes in large organizations. The system follows the CRUD (Create, Read, Update, Delete) model and utilizes a RESTful architecture for efficient customer management.
 
 ## 📋 Table of Contents
-1. [Requirements](##requirements)
-2. [Installation](##installation)
-3. [Usage](##usage)
+1. [Requirements](#requirements)
+2. [Installation](#installation)
+3. [Usage](#-usage)
 4. [Project Structure](#project-structure)
-5. [Contributions](##contributions)
+5. [Contributions](#contributions)
 
-## 📜 Requirements
+## Requirements <a name="requirements"></a>
 To run the intelligent chatbot system, you need to have the following software installed:
 - Docker
 - Docker Compose
 
-## 🚀 Installation
+## 🚀 Installation <a name="installation"></a>
 Follow these steps to set up the project:
 
 1. Clone the repository:
@@ -50,7 +50,7 @@ bashCopy codedocker-compose up --build
 This command will build the necessary Docker images and start the containers. The process may take a few minutes to complete.
 Once the containers are up and running, the intelligent chatbot system should be ready to use! 🎉
 
-## 💬 Usage
+## 💬 Usage <a name="usage"></a>
 
 To interact with the chatbot system, follow these steps:
 
@@ -91,7 +91,7 @@ The frontend directory contains the frontend user interface code and its associa
 
 The docker-compose.yml file defines the services and their configurations for running the system using Docker Compose.
 
-## 🤝 Contributions
+## 🤝 Contributions <a name="contributions"></a>
 
 Contributions to the intelligent chatbot system are welcome!
 If you encounter any issues, have suggestions for improvements, or would like to add new features, please submit a pull request or open an issue on the GitHub repository. 😊
