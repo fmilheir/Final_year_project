@@ -3,11 +3,11 @@
 This project presents an intelligent chatbot system designed to streamline ticketing processes in large organizations. The system follows the CRUD (Create, Read, Update, Delete) model and utilizes a RESTful architecture for efficient customer management.
 
 ## 📋 Table of Contents
-1. [Requirements](#requirements)
-2. [Installation](#installation)
-3. [Usage](#usage)
+1. [Requirements](##requirements)
+2. [Installation](##installation)
+3. [Usage](##usage)
 4. [Project Structure](#project-structure)
-5. [Contributions](#contributions)
+5. [Contributions](##contributions)
 
 ## 📜 Requirements
 To run the intelligent chatbot system, you need to have the following software installed:
