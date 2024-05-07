@@ -54,12 +54,12 @@ const Chatbot: React.FC = () => {
   };
 
   return (
-    <main> 
-    <div className="chatbot-container">
-    <h1 className="page-header">
+    <main>
+      <h1 className="page-header">
       <i className="fas fa-user"></i>
         Admin Panel</h1>
-      <div className="chat-history">
+    <div className="chatbot-container">
+      <div className="chat-history">  
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.role}`}>
             {message.content}

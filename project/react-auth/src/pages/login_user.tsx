@@ -47,12 +47,12 @@ const LoginUser = () => {
 
   return (
     <main>
+      <div className="container">
       {errorMessage && (
         <div className="alert alert-danger" role="alert">
           {errorMessage}
         </div>
       )}
-      <div className="container">
         <div className="row d-flex justify-content-center">
           <div className="col-md-6">
             <h1 className="text-center mb-4">

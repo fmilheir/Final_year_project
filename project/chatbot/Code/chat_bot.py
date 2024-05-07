@@ -87,7 +87,7 @@ class DocumentChatbot:
             return
         self.embeddings = LlamaCppEmbeddings(model_path=self.model_path)
         if os.path.exists(self.index_path):
-            self.index = FAISS.load_local(self.index_path, self.embeddings)
+            self.index = FAISS.load_local(self.index_path, self.embeddings, allow_dangerous_deserialization=True)
         else:
             print("Index not found. Processing documents and generating index...")
             all_chunks = self.process_documents()
