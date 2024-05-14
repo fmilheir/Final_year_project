@@ -23,7 +23,7 @@ import(
 	}
 	
 	type User struct {
-		gorm.Model
+		ID        uint   `gorm:"primaryKey;autoIncrement:true;autoIncrementIncrement:10000"`
 		FirstName  string  `gorm:"not null"`
 		LastName   string  `gorm:"not null"`
 		Email     string  `gorm:"unique;not null"`

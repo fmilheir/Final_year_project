@@ -231,15 +231,27 @@ func User(c *fiber.Ctx) error {
 		fmt.Println(userID)
 	
 		// Query the database to find the user by ID
-		var user models.Admin
-		if err := database.DB.Db.First(&user, userID).Error; err != nil {
-			c.Status(fiber.StatusNotFound)
-			return c.JSON(fiber.Map{
-				"message": "User not found",
-			})
+		var admin models.Admin
+		var user models.User
+		if err := database.DB.Db.First(&admin, userID).Error; err != nil {
+			if err := database.DB.Db.First(&user, userID).Error; err != nil {
+				c.Status(fiber.StatusNotFound)
+				return c.JSON(fiber.Map{
+					"message": "User not found",
+				})
+			}
 		}
 	
 		// Return the user's first name along with other necessary information
+		if admin.ID != 0 {
+			return c.JSON(fiber.Map{
+				"ID": admin.ID,
+				"role": admin.Role,
+				"firstName": admin.FirstName,
+				"email": admin.Email, // You can include other user information as needed
+				// Add more fields as necessary
+			})
+		}
 		return c.JSON(fiber.Map{
 			"ID": user.ID,
 			"role": user.Role,
@@ -413,7 +425,7 @@ func UpdateUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	userIDStr := data["userID"]
+	userIDStr := data["ID"]
 	userID, err := strconv.Atoi(userIDStr)
 	if err != nil {
 		c.Status(fiber.StatusBadRequest)
@@ -424,12 +436,42 @@ func UpdateUser(c *fiber.Ctx) error {
 
 	// Query the database to find the user by ID
 	var user models.User
+	var admin models.Admin
 	if err := database.DB.Db.First(&user, userID).Error; err != nil {
-		c.Status(fiber.StatusNotFound)
-		return c.JSON(fiber.Map{
-			"message": "User not found",
-		})
+		if err := database.DB.Db.First(&admin, userID).Error; err != nil {
+			c.Status(fiber.StatusNotFound)
+			return c.JSON(fiber.Map{
+				"message": "User not found",
+			})
+		}
 	}
+	
+
+	if (admin.ID != 0){
+		// Update the user's information
+		if data["firstName"] != "" {
+			admin.FirstName = data["firstName"]
+		}
+		if data["lastName"] != "" {
+			admin.LastName = data["lastName"]
+		}
+		if data["email"] != "" {
+			admin.Email = data["email"]
+		}
+		if data["role"] != "" {
+			admin.Role = data["role"]
+		}
+		if data["password"] != "" {
+			password, err := bcrypt.GenerateFromPassword([]byte(data["password"]), bcrypt.DefaultCost)
+			if err != nil {
+				return err
+			}
+			admin.Password = password
+		}
+		database.DB.Db.Save(&admin)
+		return c.JSON(admin)
+	}
+
 
 	// Update the user's information
 	if data["firstName"] != "" {
@@ -533,16 +575,36 @@ func FetchUserDetails(c *fiber.Ctx) error {
 
 	// Query the database to find the user by ID
 	var user models.User
+	var admin models.Admin
 	if err := database.DB.Db.First(&user, userID).Error; err != nil {
-		c.Status(fiber.StatusNotFound)
-		return c.JSON(fiber.Map{
-			"message": "User not found",
-		})
+		if err := database.DB.Db.First(&admin, userID).Error; err != nil {
+			c.Status(fiber.StatusNotFound)
+			return c.JSON(fiber.Map{
+				"message": "User not found",
+			})
+		}
 	}
 
 	// Return the user's information
+	fmt.Println(admin)
+	if admin.ID != 0 {
+		return c.JSON(fiber.Map{
+			"ID": admin.ID,
+			"role": admin.Role,
+			"firstName": admin.FirstName,
+			"email": admin.Email, // You can include other user information as needed
+			// Add more fields as necessary
+		})
+	}
 	fmt.Println(user)
-	return c.JSON(user)
+	return c.JSON(fiber.Map{
+		"ID": user.ID,
+		"role": user.Role,
+		"firstName": user.FirstName,
+		"lastName": user.LastName,
+		"email": user.Email, // You can include other user information as needed
+		// Add more fields as necessary
+	})
 }
 
 	

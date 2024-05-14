@@ -2,7 +2,6 @@
   min-height: 100px !important;
   height: 100px !important;
   max-height: 100px !important;  
-  overflow: hidden;
   box-shadow: 0  rgba(0, 0, 0, 0.1);
   margin-bottom: 0;
 }

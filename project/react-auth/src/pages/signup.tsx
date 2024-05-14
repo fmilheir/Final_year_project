@@ -5,8 +5,8 @@ import '../App.css';
 const Signup = () => {
   const [formData, setFormData] = useState({
     email: "",
-    firstName: "",
-    lastName: "",
+    FirstName: "",
+    LastName: "",
     companyName: "",
     password: "",
     confirmPassword: "",
@@ -83,27 +83,27 @@ const Signup = () => {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="FirstName">First Name</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="firstName"
-                  name="firstName"
+                  id="FirstName"
+                  name="FirstName"
                   placeholder="Enter first name"
-                  value={formData.firstName}
+                  value={formData.FirstName}
                   required
                   onChange={handleChange}
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
+                <label htmlFor="LastName">Last Name</label>
                 <input
                   type="text"
                   className="form-control"
-                  id="lastName"
-                  name="lastName"
+                  id="LastName"
+                  name="LastName"
                   placeholder="Enter last name"
-                  value={formData.lastName}
+                  value={formData.LastName}
                   required
                   onChange={handleChange}
                 />

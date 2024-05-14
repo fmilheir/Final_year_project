@@ -42,7 +42,6 @@ const Navigation: React.FC<Props> = ({ isAuthenticated, role }) => {
               <Nav className="ms-auto align-items-center">
                 {isAuthenticated ? (
                   <>
-                    <Nav.Link as={Link} to="/home">Home</Nav.Link>
                     <Nav.Link as={Link} to="/dashboard">Dashboard</Nav.Link>
                     <Nav.Link as={Link} to="/chatbot">Chatbot</Nav.Link>
                     <Nav.Link as={Link} to="/create_ticket">Create Ticket</Nav.Link>

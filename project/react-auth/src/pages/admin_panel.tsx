@@ -58,10 +58,20 @@ const AdminPanel: React.FC<Props> = ({ userID }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ companyid }),
+        body: JSON.stringify({ companyid: companyid?.toString()}),
       });
       const data = await response.json();
-      setUsers(data);
+      if (response.status === 404) {
+        console.error('No users found');
+      }
+      const usersData = data.map((user: User) => ({
+        id: user.id,
+        FirstName: user.firstName,
+        LastName: user.lastName,
+        Email: user.email,
+        Role: user.role,
+      }));
+      setUsers(usersData);
     } catch (error) {
       console.error('Error fetching users:', error);
     }
@@ -180,19 +190,19 @@ return (
             </TableRow>
           </TableHead>
           <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.FirstName}</TableCell>
-                <TableCell>{user.LastName}</TableCell>
-                <TableCell>{user.Email}</TableCell>
-                <TableCell>{user.Role}</TableCell>
+            {users.map((User) => (
+              <TableRow key={User.id}>
+                <TableCell>{User.FirstName}</TableCell>
+                <TableCell>{User.LastName}</TableCell>
+                <TableCell>{User.Email}</TableCell>
+                <TableCell>{User.Role}</TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="primary" onClick={() => handleEdit(user)}>
+                  <Button variant="outlined" color="primary" onClick={() => handleEdit(User)}>
                     Edit
                   </Button>
                 </TableCell>
                 <TableCell>
-                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(user)}>
+                  <Button variant="outlined" color="secondary" onClick={() => handleDelete(User)}>
                     Delete
                   </Button>
                 </TableCell>

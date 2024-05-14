@@ -10,6 +10,7 @@ import Dashboard from './pages/dashboard';
 import Chatbot from './pages/chatbot';
 import CreateTicketForm from './pages/create_ticket';
 import AdminPanel from './pages/admin_panel';
+import AdminDashboard from './pages/admin_dashboard';
 import './App.css';
 
 const App: React.FC = () => {
@@ -98,11 +99,15 @@ const App: React.FC = () => {
           />
           <Route
             path="/profile"
-            element={isAuthenticated ? <Profile userID={userID} />: <Navigate replace to="/home" />}
+            element={isAuthenticated ? <Profile userID={userID} /> : <Navigate replace to="/home" />}
           />
           <Route
             path="/admin_panel"
             element={isAuthenticated && isAdmin ? <AdminPanel userID={userID} /> : <Navigate replace to="/home" />}
+          />
+          <Route
+            path="/admin_dashboard"
+            element={isAuthenticated && isAdmin ? <AdminDashboard /> : <Navigate replace to="/home" />}
           />
         </Routes>
       </Router>
