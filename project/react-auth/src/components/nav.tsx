@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Navbar, Container, Nav, Button } from 'react-bootstrap';
+import { Navbar, Container, Nav, Button, NavDropdown } from 'react-bootstrap';
 import logo from '../images/solent_logo.png';
 import profileIcon from '../images/undraw_profile.svg';
-import '../css/nav.css'; // Import custom CSS styles
+import '../css/nav.css'; 
 
 interface Props {
   isAuthenticated: boolean;
@@ -33,9 +33,9 @@ interface Props {
 const Navigation: React.FC<Props> = ({ isAuthenticated, role }) => {
     return (
       <header>
-          <Navbar bg="white" variant="white" expand="md" className="py-3">
+          <Navbar bg="white" variant="white" expand="md" >
             <Navbar.Brand as={Link} to="/">
-              <img src={logo} alt="Company Logo" className="nav-logo" width="150" height="auto" />
+              <img src={logo} alt="Company Logo" className="nav-logo" width="100" height="auto" />
             </Navbar.Brand>
             <Navbar.Toggle aria-controls="navbar-nav" />
             <Navbar.Collapse id="navbar-nav">
@@ -47,7 +47,12 @@ const Navigation: React.FC<Props> = ({ isAuthenticated, role }) => {
                     <Nav.Link as={Link} to="/chatbot">Chatbot</Nav.Link>
                     <Nav.Link as={Link} to="/create_ticket">Create Ticket</Nav.Link>
                     {role && <Nav.Link as={Link} to="/admin_panel">Admin Panel</Nav.Link>}
-                    <Button variant="link" onClick={handleLogout} className="nav-link">Sign out</Button>
+                    <NavDropdown title={<img src={profileIcon} alt="Profile" className="profile-icon" width="32" height="32" />} id="profile-dropdown">
+                      <NavDropdown.Item as={Link} to="/profile">Profile</NavDropdown.Item>
+                      <NavDropdown.Divider />
+                      {/* Call handleLogout when "Sign out" is clicked */}
+                      <NavDropdown.Item onClick={handleLogout}>Sign out</NavDropdown.Item>
+                    </NavDropdown>
                   </>
                 ) : (
                   <>

@@ -98,7 +98,7 @@ const App: React.FC = () => {
           />
           <Route
             path="/profile"
-            element={isAuthenticated ? <Profile userID={userID} /> : <Navigate replace to="/home" />}
+            element={isAuthenticated ? <Profile userID={userID} />: <Navigate replace to="/home" />}
           />
           <Route
             path="/admin_panel"

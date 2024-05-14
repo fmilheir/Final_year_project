@@ -4,28 +4,29 @@ import { Link } from "react-router-dom";
 const Main = () => {
   return (
     <main>
-      <div className="py-3 bg-white">
-        <div className="row align-items-center">
-          <div className="col-lg-6">
-            <h1 className="display-4 fw-bold mb-4">Streamline Your Ticketing Process</h1>
-            <p className="lead mb-4">
-              Our intelligent chatbot system leverages advanced NLP techniques and industry standards to provide accurate and efficient ticket resolution.
-            </p>
-            <div className="d-grid gap-3 d-md-flex">
-              <Link to="/signup" className="btn btn-primary btn-lg px-4">
-                Get Started
-              </Link>
-              <Link to="/login_admin" className="btn btn-outline-secondary btn-lg px-4">
-                Login
-              </Link>
+      <div>
+        <div className="bg-white">
+          <div className="row align-items-center">
+            <div className="col-lg-6">
+              <h1 className="display-4 fw-bold mb-4">Streamline Your Ticketing Process</h1>
+              <p className="lead mb-4">
+                Our intelligent chatbot system leverages advanced NLP techniques and industry standards to provide accurate and efficient ticket resolution.
+              </p>
+              <div className="d-grid gap-3 d-md-flex">
+                <Link to="/signup" className="btn btn-primary btn-lg px-4">
+                  Get Started
+                </Link>
+                <Link to="/login_admin" className="btn btn-outline-secondary btn-lg px-4">
+                  Login
+                </Link>
+              </div>
+            </div>
+            <div className="col-lg-6">
+              <img src="path/to/chatbot-illustration.svg" alt="se if can gett good screnshot from dashboard" className="img-fluid" />
             </div>
           </div>
-          <div className="col-lg-6">
-            <img src="path/to/chatbot-illustration.svg" alt="Chatbot Illustration" className="img-fluid" />
-          </div>
         </div>
-      </div>
-      <div className="bg-light py-5">
+        <div className="bg-white py-5">
           <div className="row g-4">
             <div className="col-lg-4">
               <div className="card p-4">

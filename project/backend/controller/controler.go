@@ -516,4 +516,33 @@ func PassIncidentInfoToAPI(data []byte) (string, error) {
     return responseBody.String(), nil
 }
 
+func FetchUserDetails(c *fiber.Ctx) error {
+	// Get the user ID from the request body
+	var data map[string]string
+	if err := c.BodyParser(&data); err != nil {
+		return err
+	}
+	userIDStr := data["userID"]
+	userID, err := strconv.Atoi(userIDStr)
+	if err != nil {
+		c.Status(fiber.StatusBadRequest)
+		return c.JSON(fiber.Map{
+			"message": "Invalid user ID",
+		})
+	}
+
+	// Query the database to find the user by ID
+	var user models.User
+	if err := database.DB.Db.First(&user, userID).Error; err != nil {
+		c.Status(fiber.StatusNotFound)
+		return c.JSON(fiber.Map{
+			"message": "User not found",
+		})
+	}
+
+	// Return the user's information
+	fmt.Println(user)
+	return c.JSON(user)
+}
+
 	

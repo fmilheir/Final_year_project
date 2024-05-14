@@ -18,5 +18,6 @@ func Setup(app *fiber.App) {
 	app.Get("/api/user", controller.User)
 	app.Post("/api/logout", controller.Logout)
 	app.Post("/api/create_ticket", controller.CreateTicket)
-	
+	app.Post("api/getUserInformation", controller.FetchUserDetails)
 }
+	

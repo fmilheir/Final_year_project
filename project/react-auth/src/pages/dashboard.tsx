@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom'; // Import Link from react-router-dom
 import { Box, Button, Card, CardContent, Typography, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import axios from 'axios';
 import '../css/nav.css';
 
 interface Ticket {
@@ -56,50 +55,51 @@ const Dashboard = () => {
     }
 
     return (
-        <Box sx={{ flexGrow: 1, m: 3 }}>
-            <Typography variant="h4" gutterBottom>
-                Dashboard
-            </Typography>
-            <Button variant="contained" startIcon={<AddIcon />} onClick={handleCreateTicket}>
+        <div className="container mt-4">
+          <div className="row">
+            <div className="col">
+              <h2 className="mb-4">Dashboard</h2>
+              <button className="btn btn-primary mb-4" onClick={handleCreateTicket}>
+                <i className="fas fa-plus me-2"></i>
                 Create New Ticket
-            </Button>
-            {isLoading ? (
-                <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '50vh' }}>
-                    <CircularProgress />
-                </Box>
-            ) : (
-                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 3 }}>
-                    {tickets.length ? (
-                        tickets.map((ticket) => (
-                            <Card key={ticket.ID} sx={{ minWidth: 275 }}>
-                                <CardContent>
-                                    <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-                                        Ticket ID: {ticket.ID}
-                                    </Typography>
-                                    <Typography variant="h5" component="div">
-                                        {ticket.name}
-                                    </Typography>
-                                    <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                                        Priority: {ticket.priority}
-                                    </Typography>
-                                    <Typography variant="body2">
-                                        {ticket.IncidentDetail}
-                                    </Typography>
-                                    <Link to={`/edit_ticket/${ticket.ID}`} style={{ textDecoration: 'none' }}>
-                                        <Button variant="outlined" color="primary" size="small" sx={{ mt: 2 }}>
-                                            Edit
-                                        </Button>
-                                    </Link>
-                                </CardContent>
-                            </Card>
-                        ))
-                    ) : (
-                        <Typography>No tickets available.</Typography>
-                    )}
-                </Box>
-            )}
-        </Box>
-    );
+              </button>
+            </div>
+          </div>
+          {isLoading ? (
+            <div className="d-flex justify-content-center align-items-center" style={{ height: '50vh' }}>
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          ) : (
+            <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+              {tickets.length ? (
+                tickets.map((ticket) => (
+                  <div className="col" key={ticket.ID}>
+                    <div className="card h-100">
+                      <div className="card-body">
+                        <h5 className="card-title">{ticket.name}</h5>
+                        <h6 className="card-subtitle mb-2 text-muted">Ticket ID: {ticket.ID}</h6>
+                        <p className="card-text">{ticket.IncidentDetail}</p>
+                        <p className="card-text">
+                          <small className="text-muted">Priority: {ticket.priority}</small>
+                        </p>
+                        <Link to={`/edit_ticket/${ticket.ID}`} className="btn btn-outline-primary btn-sm">
+                          Edit
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <div className="col">
+                  <p>No tickets available.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      );
 };
 
 export default Dashboard;
