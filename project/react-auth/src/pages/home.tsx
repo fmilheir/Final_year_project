@@ -3,48 +3,56 @@ import { Link } from "react-router-dom";
 
 const Main = () => {
   return (
-    <main className="container py-5">
-      <div className="row align-items-center">
-        <div className="col-lg-6">
-          <h1 className="display-4 fw-bold mb-4">Welcome to the Intelligent Ticketing System</h1>
-          <p className="lead mb-4">
-            This prototype demonstrates a comprehensive solution for streamlining ticketing processes in large organizations. By leveraging advanced natural language processing techniques, retrieval-augmented generation, and industry standards, our intelligent chatbot system provides accurate, contextually relevant, and human-like responses to user queries.
-          </p>
-          <div className="d-grid gap-3 d-md-flex">
-            <Link to="/signup" className="btn btn-primary btn-lg px-4">
-              Create an Account
-            </Link>
-            <Link to="/login_admin" className="btn btn-outline-secondary btn-lg px-4">
-              Login as Admin
-            </Link>
+    <main>
+      <div className="py-3 bg-white">
+        <div className="row align-items-center">
+          <div className="col-lg-6">
+            <h1 className="display-4 fw-bold mb-4">Streamline Your Ticketing Process</h1>
+            <p className="lead mb-4">
+              Our intelligent chatbot system leverages advanced NLP techniques and industry standards to provide accurate and efficient ticket resolution.
+            </p>
+            <div className="d-grid gap-3 d-md-flex">
+              <Link to="/signup" className="btn btn-primary btn-lg px-4">
+                Get Started
+              </Link>
+              <Link to="/login_admin" className="btn btn-outline-secondary btn-lg px-4">
+                Login
+              </Link>
+            </div>
           </div>
-        </div>
-        <div className="col-lg-6">
-          <img src="path/to/chatbot-illustration.svg" alt="Chatbot Illustration" className="img-fluid" />
+          <div className="col-lg-6">
+            <img src="path/to/chatbot-illustration.svg" alt="Chatbot Illustration" className="img-fluid" />
+          </div>
         </div>
       </div>
-      <div className="row mt-5">
-        <div className="col-lg-4">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">Enhanced Customer Experience</h5>
-              <p className="card-text">Our chatbot provides immediate responses to common inquiries, improving customer satisfaction and reducing wait times.</p>
+      <div className="bg-light py-5">
+          <div className="row g-4">
+            <div className="col-lg-4">
+              <div className="card p-4">
+                <div className="card-body text-center">
+                  <i className="fas fa-ticket-alt fa-3x text-primary mb-3"></i>
+                  <h5 className="card-title">Ticket Management</h5>
+                  <p className="card-text">Efficiently manage and track tickets across departments.</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="col-lg-4">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">Reduced Operational Costs</h5>
-              <p className="card-text">By automating a significant portion of the ticketing process, organizations can reduce human resource costs and increase efficiency.</p>
+            <div className="col-lg-4">
+              <div className="card p-4">
+                <div className="card-body text-center">
+                  <i className="fas fa-robot fa-3x text-primary mb-3"></i>
+                  <h5 className="card-title">Intelligent Chatbot</h5>
+                  <p className="card-text">Automated ticket resolution with human-like responses.</p>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div className="col-lg-4">
-          <div className="card border-0 shadow-sm">
-            <div className="card-body">
-              <h5 className="card-title">Scalability and Consistency</h5>
-              <p className="card-text">Our chatbot system can handle high volumes of inquiries while maintaining consistent and accurate responses across the organization.</p>
+            <div className="col-lg-4">
+              <div className="card p-4">
+                <div className="card-body text-center">
+                  <i className="fas fa-chart-line fa-3x text-primary mb-3"></i>
+                  <h5 className="card-title">Analytics & Reporting</h5>
+                  <p className="card-text">Gain insights into ticket trends and performance metrics.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
