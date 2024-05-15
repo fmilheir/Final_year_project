@@ -520,27 +520,23 @@ func CreateTicket(c *fiber.Ctx) error {
 
 func PassIncidentInfoToAPI(data []byte) (string, error) {
 
-	tlsConfig := &tls.Config{
-        InsecureSkipVerify: true,
-    }
-    transport := &http.Transport{
-        TLSClientConfig: tlsConfig,
-    }
-    client := &http.Client{
-        Transport: transport,
-    }
-
+	var formattedBuf bytes.Buffer
+	err := json.Indent(&formattedBuf, data, "", "    ")
+	if err != nil {
+		return "", err
+	}
+	fmt.Println(formattedBuf.String())
 	reader := bytes.NewReader(data)
-	fmt.Println(reader)
 	// Make a POST request to the API in another container:
- 	resp, err := client.Post("https://ticketing:3030/tmf-api/Incident/v4/incident", "application/json", reader)
+	http.DefaultTransport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: true}
+    resp, err := http.Post("https://localhost:3030/tmf-api/Incident/v4/incident", "application/json", reader)
     if err != nil {
 		fmt.Println(err)
         return "", err
     }
-    defer resp.Body.Close()
+	defer resp.Body.Close()
 	fmt.Println("passed 1")
-
+	fmt.Println(resp)
     // Read the response body
     responseBody := new(bytes.Buffer)
     _, err = io.Copy(responseBody, resp.Body)

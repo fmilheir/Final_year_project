@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, Navigate } from 'react-router-dom'; // Import Link from react-router-dom
 import { Box, Button, Card, CardContent, Typography, CircularProgress } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import https from 'https';
 import '../css/nav.css';
+
 
 interface Ticket {
     ID: number;
@@ -12,6 +14,7 @@ interface Ticket {
     state: string;
 }
 
+
 const Dashboard = () => {
     const [tickets, setTickets] = useState<Ticket[]>([]); 
     const [isLoading, setIsLoading] = useState(true);
@@ -20,29 +23,26 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchTickets = async () => {
             try {
-                const response = await fetch('https://localhost:3030/tmf-api/Incident/v4/incident',
-                    {
-                        method: 'GET',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        //agent: new (require('https').Agent)({ rejectUnauthorized: false })
-
-                    } // Add agent to ignore self-signed certificate
-                );
-                if (!response.ok) {
-                    throw new Error('Failed to fetch tickets');
-                }
-                const data = await response.json();
-                console.log('Tickets:', data);
-                setTickets(data);
+              const response = await fetch('/tmf-api/Incident/v4/incident', {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+        
+              if (!response.ok) {
+                throw new Error('Failed to fetch tickets');
+              }
+        
+              const data = await response.json();
+              console.log('Tickets:', data);
+              setTickets(data);
             } catch (error) {
-                console.error('Error fetching tickets:', error);
+              console.error('Error fetching tickets:', error);
             } finally {
-                setIsLoading(false);
+              setIsLoading(false);
             }
-        };
-
+          };
         fetchTickets();
     }, []);
 

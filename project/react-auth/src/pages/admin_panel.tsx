@@ -10,13 +10,14 @@ import React, { useState, useEffect, ChangeEvent, SyntheticEvent } from 'react';
 import '../css/admin_panel.css';
 
 
+
 interface User {
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   role: string;
-  id?: number;
+  ID?: number;
   FirstName?: string;
   LastName?: string;
   Email?: string;
@@ -31,6 +32,7 @@ const AdminPanel: React.FC<Props> = ({ userID }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState<User>({ firstName: '', lastName: '', email: '', role: 'admin', password: '' });
   const [companyId, setCompanyId] = useState<number | null>(null);
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
 
   // Function to fetch company ID from the server
   const fetchCompanyId = async () => {
@@ -65,12 +67,13 @@ const AdminPanel: React.FC<Props> = ({ userID }) => {
         console.error('No users found');
       }
       const usersData = data.map((user: User) => ({
-        id: user.id,
-        FirstName: user.firstName,
-        LastName: user.lastName,
-        Email: user.email,
-        Role: user.role,
+        id: user.ID,
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Email: user.Email,
+        Role: user.Role,
       }));
+      console.log('Users:', usersData);
       setUsers(usersData);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -129,6 +132,7 @@ const updateUser = async (e: SyntheticEvent) => {
         fetchUsers(companyID);
         setNewUser({ firstName: '', lastName: '', email: '', role: '', password: '' });
         setCompanyId(null);
+        setShowCreatePopup(false);
       } else {
         console.error('Failed to create user');
       }
@@ -191,7 +195,7 @@ return (
           </TableHead>
           <TableBody>
             {users.map((User) => (
-              <TableRow key={User.id}>
+              <TableRow key={User.ID}>
                 <TableCell>{User.FirstName}</TableCell>
                 <TableCell>{User.LastName}</TableCell>
                 <TableCell>{User.Email}</TableCell>
@@ -211,66 +215,89 @@ return (
           </TableBody>
         </Table>
       </section>
-
-
       <section>
-        <h2 className="section-header">Create New User</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-input">
-            <label htmlFor="firstName" className="form-label">First Name:</label>
-            <input
-              type="text"
-              id="firstName"
-              name="firstName"
-              value={newUser.firstName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="lastName" className="form-label">Last Name:</label>
-            <input
-              type="text"
-              id="lastName"
-              name="lastName"
-              value={newUser.lastName}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="email" className="form-label">Email:</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={newUser.email}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="password" className="form-label">Password:</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={newUser.password}
-              onChange={handleInputChange}
-            />
-          </div>
-          <div className="form-input">
-            <label htmlFor="role" className="form-label">Role:</label>
-            <select
-              id="role"
-              name="role"
-              value={newUser.role}
-              onChange={handleRoleChange}
-            >
-              <option value="admin">Admin</option>
-              <option value="normal">Normal</option>
-            </select>
-          </div>
-          <button type="submit" className="btn btn-primary">Create User</button>
-        </form>
-      </section>
+          <h2 className="section-header">Create New User</h2>
+          <Button variant="contained" color="primary" onClick={() => setShowCreatePopup(true)}>
+            Create New User
+          </Button>
+          {showCreatePopup && (
+            <div className="modal d-block">
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title">Create New User</h5>
+                    <button type="button" className="btn-close" onClick={() => setShowCreatePopup(false)}></button>
+                  </div>
+                  <form onSubmit={handleSubmit}>
+                    <div className="modal-body">
+                      <div className="mb-3">
+                        <label htmlFor="firstName" className="form-label">First Name:</label>
+                        <input
+                          type="text"
+                          id="firstName"
+                          name="firstName"
+                          className="form-control"
+                          value={newUser.firstName}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="lastName" className="form-label">Last Name:</label>
+                        <input
+                          type="text"
+                          id="lastName"
+                          name="lastName"
+                          className="form-control"
+                          value={newUser.lastName}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="email" className="form-label">Email:</label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          className="form-control"
+                          value={newUser.email}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="password" className="form-label">Password:</label>
+                        <input
+                          type="password"
+                          id="password"
+                          name="password"
+                          className="form-control"
+                          value={newUser.password}
+                          onChange={handleInputChange}
+                        />
+                      </div>
+                      <div className="mb-3">
+                        <label htmlFor="role" className="form-label">Role:</label>
+                        <select
+                          id="role"
+                          name="role"
+                          className="form-select"
+                          value={newUser.role}
+                          onChange={handleRoleChange}
+                        >
+                          <option value="admin">Admin</option>
+                          <option value="normal">Normal</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="modal-footer">
+                      <button type="submit" className="btn btn-primary">Create User</button>
+                      <button type="button" className="btn btn-secondary" onClick={() => setShowCreatePopup(false)}>Cancel</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );
