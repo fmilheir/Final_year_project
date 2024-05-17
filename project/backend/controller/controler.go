@@ -35,7 +35,7 @@ func Register_admin(c *fiber.Ctx) error {
 	if err := c.BodyParser(&data); err != nil {
 		return err
 	}
-	if data["companyName"] == "" || data["firstName"] == "" || data["email"] == "" || data["password"] == "" {
+	if data["companyName"] == "" || data["FirstName"] == "" || data["email"] == "" || data["password"] == "" || data["LastName"] == ""{
 		c.Status(fiber.StatusBadRequest)
 		return c.JSON(fiber.Map{
 			"message": "Bad request please fill in all fields",

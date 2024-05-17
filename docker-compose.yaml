@@ -33,9 +33,11 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3000:80'
+      - '3001:443'
     volumes:
       - ./project/react-auth/src:/etc/src
       - ./project/react-auth/public:/app/public
+
     depends_on:
       - backend
     environment:
