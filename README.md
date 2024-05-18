@@ -48,8 +48,11 @@ Download the model file and rename it to llama-2-7b.Q4_0.gguf.
 Create a folder named Gpt4all inside the project/chatbot directory.
 Place the downloaded model files (mistral-7b-openorca.gguf2.Q4_0.gguf and llama-2-7b.Q4_0.gguf) inside the Gpt4all folder.
 Build and run the Docker containers:
-bashCopy codedocker-compose up --build
-This command will build the necessary Docker images and start the containers. The process may take a few minutes to complete.
+```bash Copy code
+docker-compose up --build
+```
+This command will build the necessary Docker images and start the containers.
+The process may take a few minutes to complete.
 Once the containers are up and running, the intelligent chatbot system should be ready to use! 🎉
 
 ## 💬 Usage <a name="usage"></a>

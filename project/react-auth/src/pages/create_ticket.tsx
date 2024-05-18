@@ -1,6 +1,5 @@
 import React, { useState, ChangeEvent } from 'react';
 import { TextField, Button, Box, Container, Typography, Select, MenuItem, SelectChangeEvent} from '@mui/material';
-import axios from 'axios';
 import '../css/nav.css';
 
 const CreateTicketForm = () => {
@@ -10,12 +9,16 @@ const CreateTicketForm = () => {
     priority: '',
     domain: 'RAN',
     IncidentDetail: '',
+    ackState: "acknowledged",
+    //time now in the format of 2022-03-10T04:01:12Z
+    occurTime: new Date(),
+    state: "raised", 
     sourceObject: [{
       id: '12345678',
       href: '/resourceInventoryManagement/v4/resource/12345678'
     }],
     rootEventId: [{
-      id: '30086529',
+      id: '3008652',
       '@type': 'Alarm',
       href: 'exemple/'
     }]
@@ -34,9 +37,20 @@ const CreateTicketForm = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await axios.post('http://localhost:8080/api/create_ticket', ticketData);
+      console.log('Creating ticket:', ticketData);
+      const response = await fetch('/tmf-api/Incident/v4/incident', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(ticketData),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to create ticket');
+      }
       console.log('Ticket created successfully!');
       resetForm(); // Reset form after successful submission
+
     } catch (error) {
       console.error('Error creating ticket:', error);
     }
@@ -47,16 +61,19 @@ const CreateTicketForm = () => {
       name: '',
       category: '',
       priority: '',
-      domain: '',
+      domain: 'RAN',
       IncidentDetail: '',
+      ackState: "acknowledged",
+      state: "raised", 
+      occurTime: new Date(),
       sourceObject: [{
-        id: '',
-        href: ''
+        id: '12345678',
+        href: '/resourceInventoryManagement/v4/resource/12345678'
       }],
       rootEventId: [{
-        id: '',
-        '@type': '',
-        href: ''
+        id: '30086529',
+        '@type': 'Alarm',
+        href: 'exemple/'
       }]
     });
   };

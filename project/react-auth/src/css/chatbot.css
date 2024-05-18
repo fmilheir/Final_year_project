@@ -1,3 +1,5 @@
+
+
 body, html {
   height: 100%;
   margin: 0;
@@ -6,18 +8,41 @@ body, html {
 
 main {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   height: 100%;
+}
+
+.header-container {
+  width: 400px;
+  background-color: #f1f0f0;
+  padding: 20px;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.page-header {
+  background-color: #007bff;
+  color: white;
+  padding: 20px;
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 
 .chatbot-container {
   display: flex;
   flex-direction: column;
-  width: 400px; /* Set a fixed width for the container */
-  height: 600px; /* Set a fixed height for the container */
-  border: 1px solid #ccc; /* Add a border for visual separation */
-  border-radius: 5px; /* Add border radius for rounded corners */
+  width: 400px;
+  height: 600px;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .chat-history {
@@ -79,16 +104,4 @@ main {
   align-self: flex-start;
   background-color: #f0f0f0;
   color: #333;
-}
-
-.page-header {
-  background-color: #007bff;
-  color: white;
-  padding: 20px;
-  margin: 0;
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
 }

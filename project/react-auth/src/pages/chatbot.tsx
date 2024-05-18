@@ -57,7 +57,7 @@ const Chatbot: React.FC = () => {
     <main>
       <h1 className="page-header">
       <i className="fas fa-user"></i>
-        Admin Panel</h1>
+        Chatbot</h1>
     <div className="chatbot-container">
       <div className="chat-history">  
         {messages.map((message, index) => (

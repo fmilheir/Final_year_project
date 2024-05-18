@@ -72,7 +72,7 @@ type Incident struct {
 	Href string `json:"href,omitempty" gorm:"size:255"`
 
 	// unique identifier
-	ID string `json:"id,omitempty" `
+	ID string `json:"id,omitempty" " gorm:"primaryKey"`
 
 	// Impact which indicates the degree of impact on affected services or users. This field is optional. The options are extensive, significant, moderate, and minor
 	Impact ImpactType `json:"impact,omitempty"`
