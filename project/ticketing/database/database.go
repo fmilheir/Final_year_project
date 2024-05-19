@@ -29,7 +29,7 @@ func Connect() {
 		panic("failed to connect database")
 	}
 	log.Println("Connection Opened to Database")
-	db.AutoMigrate(&models.Incident{}, &models.ResourceEntity{})
+	db.AutoMigrate(&models.Incident{}, &models.ResourceEntity{}, &models.Characteristic{}, models.CharacteristicRelationship{})
 	log.Println("Database Migrated")
 	DB = Dbinstance{Db: db} 
 }

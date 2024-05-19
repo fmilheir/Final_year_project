@@ -71,7 +71,7 @@ type IncidentCreate struct {
 	Impact ImpactType `json:"impact,omitempty"`
 
 	// A textual succinct description of the nature, symptoms, cause, or effect of the incident.
-	IncidentDetail string `json:"incidentDetail,omitempty"`
+	IncidentDetail string `json:"incidentDetail"`
 
 	// Incident resolution suggestion or tip to resolve the incident
 	IncidentResolutionSuggestion string `json:"incidentResolutionSuggestion,omitempty"`
