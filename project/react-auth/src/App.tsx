@@ -95,7 +95,7 @@ const App: React.FC = () => {
           />
           <Route
             path="/create_ticket"
-            element={isAuthenticated ? <CreateTicketForm /> : <Navigate replace to="/home" />}
+            element={isAuthenticated ? <CreateTicketForm Role={isAdmin} /> : <Navigate replace to="/home" />}
           />
           <Route
             path="/profile"

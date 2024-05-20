@@ -7,12 +7,16 @@ interface Message {
 }
 
 const Chatbot: React.FC = () => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const storedMessages = localStorage.getItem('chatMessages');
+    return storedMessages ? JSON.parse(storedMessages) : [];
+  });
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false); // Added loading state
 
   useEffect(() => {
     scrollToBottom();
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
   }, [messages]);
 
   const scrollToBottom = () => {
@@ -31,7 +35,6 @@ const Chatbot: React.FC = () => {
       };
       setMessages((prevMessages) => [...prevMessages, newMessage]);
       setIsLoading(true); // Set loading to true
-
       fetch('http://localhost:8080/api/chatbot', {
         method: 'POST',
         headers: {
@@ -48,7 +51,6 @@ const Chatbot: React.FC = () => {
           setMessages((prevMessages) => [...prevMessages, botResponse]);
           setIsLoading(false); // Set loading to false after receiving response
         });
-
       setInputValue('');
     }
   };
@@ -56,28 +58,31 @@ const Chatbot: React.FC = () => {
   return (
     <main>
       <h1 className="page-header">
-      <i className="fas fa-user"></i>
-        Chatbot</h1>
-    <div className="chatbot-container">
-      <div className="chat-history">  
-        {messages.map((message, index) => (
-          <div key={index} className={`message ${message.role}`}>
-            {message.content}
-          </div>
-        ))}
-        {isLoading && <div className="loading-message">Bot is typing...</div>} {/* Display loading message */}
+        <i className="fas fa-user"></i> Chatbot
+      </h1>
+      <div className="chatbot-container">
+        <div className="chat-history">
+          {messages.map((message, index) => (
+            <div key={index} className={`message ${message.role}`}>
+              {message.content}
+            </div>
+          ))}
+          {isLoading && <div className="loading-message">Bot is typing...</div>}
+          {/* Display loading message */}
+        </div>
+        <form onSubmit={sendMessage} className="input-container">
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Type your message here..."
+            className="input-field"
+          />
+          <button type="submit" className="send-button">
+            Send
+          </button>
+        </form>
       </div>
-      <form onSubmit={sendMessage} className="input-container">
-        <input
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Type your message here..."
-          className="input-field"
-        />
-        <button type="submit" className="send-button">Send</button>
-      </form>
-    </div>
     </main>
   );
 };

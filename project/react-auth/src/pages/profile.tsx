@@ -169,10 +169,6 @@ return (
                           <input type="email" className="form-control" id="email" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="mb-3">
-                          <label htmlFor="role" className="form-label">Role:</label>
-                          <input type="text" className="form-control" id="role" value={role} onChange={(e) => setRole(e.target.value)} />
-                        </div>
-                        <div className="mb-3">
                           <label htmlFor="currentPassword" className="form-label">Current Password:</label>
                           <input type="password" className="form-control" id="currentPassword" value={currentPassword} onChange={(e) => setCurrentPassword(e.target.value)} />
                         </div>

@@ -1,8 +1,14 @@
 import React, { useState, ChangeEvent } from 'react';
-import { TextField, Button, Box, Container, Typography, Select, MenuItem, SelectChangeEvent} from '@mui/material';
+import { TextField, Button, Box, Container, Typography, Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { Navigate } from 'react-router-dom';
 import '../css/nav.css';
 
-const CreateTicketForm = () => {
+
+interface CreateTicketFormProps {
+  Role: boolean;
+}
+
+const CreateTicketForm: React.FC<CreateTicketFormProps> = ({ Role }) => {
   const [ticketData, setTicketData] = useState({
     name: '',
     category: '',
@@ -10,19 +16,12 @@ const CreateTicketForm = () => {
     domain: 'RAN',
     IncidentDetail: '',
     ackState: "acknowledged",
-    //time now in the format of 2022-03-10T04:01:12Z
     occurTime: new Date(),
-    state: "raised", 
-    sourceObject: [{
-      id: '12345678',
-      href: '/resourceInventoryManagement/v4/resource/12345678'
-    }],
-    rootEventId: [{
-      id: '3008652',
-      '@type': 'Alarm',
-      href: 'exemple/'
-    }]
+    state: "raised",
+    sourceObject: [{ id: '12345678', href: '/resourceInventoryManagement/v4/resource/12345678' }],
+    rootEventId: [{ id: '3008652', '@type': 'Alarm', href: 'exemple/' }]
   });
+  const [redirect, setRedirect] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
     const { name, value } = event.target;
@@ -49,8 +48,8 @@ const CreateTicketForm = () => {
         throw new Error('Failed to create ticket');
       }
       console.log('Ticket created successfully!');
-      resetForm(); // Reset form after successful submission
-
+      resetForm();
+      setRedirect(Role === true ? '/admin_dashboard' : '/dashboard'); // Set redirect based on user's role
     } catch (error) {
       console.error('Error creating ticket:', error);
     }
@@ -64,34 +63,39 @@ const CreateTicketForm = () => {
       domain: 'RAN',
       IncidentDetail: '',
       ackState: "acknowledged",
-      state: "raised", 
+      state: "raised",
       occurTime: new Date(),
-      sourceObject: [{
-        id: '12345678',
-        href: '/resourceInventoryManagement/v4/resource/12345678'
-      }],
-      rootEventId: [{
-        id: '30086529',
-        '@type': 'Alarm',
-        href: 'exemple/'
-      }]
+      sourceObject: [{ id: '12345678', href: '/resourceInventoryManagement/v4/resource/12345678' }],
+      rootEventId: [{ id: '30086529', '@type': 'Alarm', href: 'exemple/' }]
     });
   };
 
-
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <Container maxWidth="md">
-      <Box
-        component="form"
-        onSubmit={handleSubmit}
-        sx={{ marginTop: 4 }}
-      >
+      <Box component="form" onSubmit={handleSubmit} sx={{ marginTop: 4 }}>
         <Typography variant="h5" gutterBottom>
           Create Ticket
         </Typography>
-        <TextField label="Name" name="name" value={ticketData.name} onChange={handleChange} fullWidth margin="normal" />
-        <TextField label="Category" name="category" value={ticketData.category} onChange={handleChange} fullWidth margin="normal" />
+        <TextField
+          label="Name"
+          name="name"
+          value={ticketData.name}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
+        <TextField
+          label="Category"
+          name="category"
+          value={ticketData.category}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
         <Select
           label="Priority"
           name="priority"
@@ -104,7 +108,14 @@ const CreateTicketForm = () => {
           <MenuItem value="medium">Medium</MenuItem>
           <MenuItem value="high">High</MenuItem>
         </Select>
-        <TextField label="IncidentDetail" name="IncidentDetail" value={ticketData.IncidentDetail} onChange={handleChange} fullWidth margin="normal" />
+        <TextField
+          label="IncidentDetail"
+          name="IncidentDetail"
+          value={ticketData.IncidentDetail}
+          onChange={handleChange}
+          fullWidth
+          margin="normal"
+        />
         <Button variant="contained" color="primary" type="submit" fullWidth sx={{ marginTop: 2 }}>
           Create Ticket
         </Button>
