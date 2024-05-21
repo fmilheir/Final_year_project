@@ -21,9 +21,6 @@ const Main = () => {
                 </Link>
               </div>
             </div>
-            <div className="col-lg-6">
-              <img src="path/to/chatbot-illustration.svg" alt="se if can gett good screnshot from dashboard" className="img-fluid" />
-            </div>
           </div>
         </div>
         <div className="bg-white py-5">

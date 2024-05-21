@@ -13,14 +13,9 @@ interface Props {
 
 const handleLogout = async () => {
   try {
-    // Make a request to the logout endpoint
-    const response = await fetch('http://localhost:8080/api/logout', {
-      method: 'POST',
-      credentials: 'include', // Include cookies in the request
-    });
-    if (!response.ok) {
-      throw new Error('Failed to logout');
-    }
+    // remove cookies and local storage
+    document.cookie = "jwt" + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    
     // Redirect the user to the login page after successful logout
     window.location.href = '/login';
     window.location.reload();
